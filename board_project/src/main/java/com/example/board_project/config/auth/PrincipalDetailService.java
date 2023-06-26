@@ -1,6 +1,6 @@
 package com.example.board_project.config.auth;
 
-import com.example.board_project.model.User;
+import com.example.board_project.entity.User;
 import com.example.board_project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,9 +18,12 @@ public class PrincipalDetailService implements UserDetailsService {
     //password 부분 처리는 알아서 함
     //username이 DB에 있는지만 확인해주면 된다.
 
+
+
     @Override
-    public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(loginId).orElseThrow(() -> {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("로그인했던 아이디입니다 : " +username);
+        User user = userRepository.findByLoginId(username).orElseThrow(() -> {
             return new UsernameNotFoundException("해당 아이디를 찾을수 없습니다!");
         });
         return new PrincipalDetail(user);

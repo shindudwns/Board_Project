@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:fragment="headerFragment">
+    <div class="jumbotron text-center" style="margin-bottom:0">
+        <h1>Spring Boot Board Project</h1>
+    </div>
+
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="/">HOME</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <th:block sec:authorize="isAuthenticated()" >
+                    <li class="nav-item">
+                        <a class="nav-link" href="/board/write">글 작성</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/detail">내정보 보기</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">로그아웃</a>
+                    </li>
+                </th:block>
+                <th:block sec:authorize="!isAuthenticated()" >
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/loginForm">로그인</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/joinForm">회원가입</a>
+                    </li>
+                </th:block>
+
+
+            </ul>
+        </div>
+    </nav>
+</div>
+</html>

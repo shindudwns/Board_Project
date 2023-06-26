@@ -1,11 +1,10 @@
 package com.example.board_project.config.auth;
 
-import com.example.board_project.model.User;
+import com.example.board_project.entity.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -14,7 +13,6 @@ import java.util.Collection;
 @Getter
 public class PrincipalDetail implements UserDetails {
     private User user;  //컴포지션관계
-
     public PrincipalDetail(User user) {
         this.user = user;
     }
