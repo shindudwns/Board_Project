@@ -15,7 +15,7 @@ public class UserApiController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/userJoin")
+    @PostMapping("/auth/userJoin")
     public String userJoin(@ModelAttribute UserJoinDto userJoinDto) {
         userService.join(userJoinDto);
         //System.out.println(userJoinDto);
