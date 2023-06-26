@@ -1,8 +1,8 @@
 package com.example.board_project.service;
 
 import com.example.board_project.dto.UserJoinDto;
-import com.example.board_project.model.RoleType;
-import com.example.board_project.model.User;
+import com.example.board_project.entity.RoleType;
+import com.example.board_project.entity.User;
 import com.example.board_project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

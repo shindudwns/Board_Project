@@ -1,16 +1,12 @@
 package com.example.board_project.config.auth;
 
-import com.example.board_project.model.MessageAlert;
-import com.example.board_project.model.User;
+import com.example.board_project.entity.User;
 import com.example.board_project.repository.UserRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.io.PrintWriter;
 
 @Service
 public class PrincipalDetailService implements UserDetailsService {
