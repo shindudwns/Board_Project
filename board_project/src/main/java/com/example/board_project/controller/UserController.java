@@ -21,16 +21,19 @@ public class UserController {
         return "user/loginForm";
     }
 
-    @GetMapping("/auth/test")
-    public String test() {
-        return "test";
-    }
-
     @GetMapping("/user/detail")
     public String detail(Model model, @AuthenticationPrincipal PrincipalDetail principalDetail) {
         User user = principalDetail.getUser();
-        System.out.println("-------------------------------"+user);
         model.addAttribute("loginUser", user);
         return "/user/detail";
     }
+
+    @GetMapping("/user/modifyForm")
+    public String modifyForm(Model model, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        User user = principalDetail.getUser();
+        model.addAttribute("loginUser", user);
+        return "/user/modifyForm";
+    }
+
+
 }
