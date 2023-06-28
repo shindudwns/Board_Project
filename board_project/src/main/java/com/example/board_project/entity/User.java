@@ -35,5 +35,6 @@ public class User {
     private RoleType role;    //Enum을 쓰는게 좋다
 
     @CreationTimestamp
+    @Column(length = 0)
     private Timestamp createTime;
 }

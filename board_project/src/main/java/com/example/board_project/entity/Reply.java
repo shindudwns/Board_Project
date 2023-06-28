@@ -18,13 +18,19 @@ public class Reply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column(nullable = false)
     private String content;
-    @Column(nullable = false)
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "userId")
     private User user;
+
     @Column
     private int hits;
 //    private Board board;  board를 추가하는 것이 맞을까 board한테 reply 목록이 있기때문에 고민
+
     @CreationTimestamp
+    @Column(length = 0)
     private Timestamp createTime;
 }

@@ -24,13 +24,12 @@ public class Board {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Lob
     private String content;
 
     @Column
     private int hit;    //board 가 작성되는 순간 0 으로 설정
 
-    @Column(nullable = false)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")
     private User user;
@@ -41,5 +40,6 @@ public class Board {
     private List<Reply> replyList;
 
     @CreationTimestamp
+    @Column(length = 0)
     private Timestamp createTime;
 }
