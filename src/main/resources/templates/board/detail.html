@@ -11,7 +11,10 @@
 
 <!--    수정된 부분    -->
     <div th:if="${loginUser.id}==${board.user.id}">
+<<<<<<< HEAD
 <!--      이부분 부터 시작-->
+=======
+>>>>>>> a69e087 (g)
       <button type="button" th:onclick="|location.href ='@{/board/modify/${board.id}}'|" class="btn btn-warning">글 수정&nbsp;</button>
       <button type="submit" class="btn btn-danger" id="btn-danger">글 삭제</button>
     </div>
