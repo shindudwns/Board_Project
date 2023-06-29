@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default_layout}">
+<div layout:fragment="content">
+    <!-- Section-->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+
+                <tr th:each="board : ${boardList}">
+                    <a th:href="@{/board/detail/{board.id}(board.id=${board.id})}">
+                        <div class="col mb-5">
+                            <div class="card h-100">
+                                <!-- Product details-->
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+<!---->
+                                        <h1 th:text="${board.title}"></h1>
+                                        <br><br>
+                                        <div>
+                                            작성자 :
+                                            <td th:text="${board.user.username}"></td>
+                                        </div>
+
+
+                                        <!-- Product price-->
+                                    </div>
+                                </div>
+                                <!-- Product actions-->
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </tr>
+
+            </div>
+        </div>
+    </section>
+</div>
