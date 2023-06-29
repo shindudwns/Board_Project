@@ -26,6 +26,7 @@ public class BoardApiController {
     }
 
     @GetMapping("/board/delete/{boardId}")
+    //어렵노
     public String delete(@PathVariable int boardId) {
         boardService.deleteById(boardId);
         return "redirect:/";
