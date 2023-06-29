@@ -57,7 +57,6 @@ public class SecurityConfig {
                 .failureHandler(customAuthenticationFailureHandler);
         return http.build();
     }
-    //로그인 정보를 변경하기 위한 AuthenticationManager bean에 등록
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
