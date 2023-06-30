@@ -1,4 +1,4 @@
-# 회원관리 프로그램
+# Spring Boot를 이용해서 게시판 만들기
 
 ## 개발환경
 - IDE: IntelliJ IDEA Community
