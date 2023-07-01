@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default_layout}">
+<div layout:fragment="content">
+    <!-- Section-->
+
+    <section class="container">
+        <h1>글 수정</h1>
+        <form action="/board/modify" method="post">
+            <div class="form-group">
+                <label for="title"> 제목 : </label>
+                <input type="hidden" th:value="${board.id}", name="id">
+                <input type="text" class="form-control" id="title" th:value="${board.title}" name="title">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="summernote"> 내용 : </label>
+                <textarea id="summernote" name="content" >[[${board.content}]]</textarea>
+            </div>
+            </br>
+            <button type="submit" class="btn btn-primary">수정하기</button>
+        </form>
+        <script>
+    // 메인화면 페이지 로드 함수
+    $(document).ready(function () {
+        $('#summernote').summernote({
+            placeholder: '내용을 작성하세요',
+            height: 400,
+            maxHeight: 400
+        });
+    });
+
+        </script>
+    </section>
+</div>
