@@ -93,4 +93,28 @@ create table User (
         username varchar(255) not null,
         primary key (id)
     )
+    
+    create table Board (
+       id integer not null auto_increment,
+        createTime datetime(6),
+        loginId varchar(255) not null,
+        name varchar(255) not null,
+        password varchar(255) not null,
+        phoneNumber varchar(255) not null,
+        role varchar(255),
+        username varchar(255) not null,
+        primary key (id)
+    )
+    
+    create table Reply (
+       id integer not null auto_increment,
+        createTime datetime(6),
+        loginId varchar(255) not null,
+        name varchar(255) not null,
+        password varchar(255) not null,
+        phoneNumber varchar(255) not null,
+        role varchar(255),
+        username varchar(255) not null,
+        primary key (id)
+    )
 ```
