@@ -1,5 +1,6 @@
 package com.example.board_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,9 +36,9 @@ public class Board {
     @JoinColumn(name = "userId")
     private User user;
 
-    @Column
-    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "replyList")
+
+    @JsonIgnoreProperties({"board"})
+    @OneToMany(mappedBy = "board",fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     private List<Reply> replyList;
 
     @CreationTimestamp

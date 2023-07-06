@@ -23,9 +23,13 @@ public class Reply {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")
     private User user;
-    @Column
-    private int hits;
+    //    @Column
+//    private int hits;
 //    private Board board;  board를 추가하는 것이 맞을까 board한테 reply 목록이 있기때문에 고민
+    @JoinColumn(name = "boardId")
+    @ManyToOne
+    private Board board;
+
     @CreationTimestamp
     private Timestamp createTime;
 }

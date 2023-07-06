@@ -48,11 +48,11 @@ public class ReplyService {
         return reply;
     }
 
-    @Transactional
-    public Reply detail(int replyId) {
-        Reply reply = replyRepository.findById(replyId).get();
-        return reply;
-    }
+//    @Transactional
+//    public Reply detail(int replyId) {
+//        Reply reply = replyRepository.findById(replyId).get();
+//        return reply;
+//    }
 
     public Reply modifyForm(int replyId) {
         Reply reply = replyRepository.findById(replyId).get();
