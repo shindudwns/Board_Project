@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html   xmlns:th="http://www.thymeleaf.org"
+
+<html
+        xmlns:th="http://www.thymeleaf.org"
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layout/default_layout}">
 <div layout:fragment="content">
   <!-- Section-->
 
   <section class="container">
-    <h1>글 상세보기</h1>
     <br>
 
 <!--    수정했다   -->
@@ -41,9 +42,14 @@
       <h1> 작성 시간 : [[${board.createTime}]]</h1>
     </div>
 <!--    jquery를 사용해서 데이터를 주기위한 input 태그-->
-    <input id="boardId" type="hidden" th:value="${board.id}">
+    <input id="boardId" type="hidden"  th:value="${board.id}">
+
+
+
+
     <script>
     // 메인화면 페이지 로드 함수
+
     $(document).ready(function () {
     
         $('#summernote').summernote({
