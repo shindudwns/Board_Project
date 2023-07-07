@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
 public class Reply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

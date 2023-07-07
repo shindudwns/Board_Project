@@ -94,28 +94,22 @@ create table User (
         primary key (id)
     )
     
-    create table Board (
+    create table Reply (
        id integer not null auto_increment,
-        createTime datetime(6),
-        title varchar(255) not null,
         content varchar(255) not null,
-        hit int not null,
-        
-        phoneNumber varchar(255) not null,
-        role varchar(255),
-        username varchar(255) not null,
+        createTime datetime(6),
+        boardId integer,
+        userId integer,
         primary key (id)
     )
     
-    create table Reply (
+    create table Board (
        id integer not null auto_increment,
+        content longtext,
         createTime datetime(6),
-        loginId varchar(255) not null,
-        name varchar(255) not null,
-        password varchar(255) not null,
-        phoneNumber varchar(255) not null,
-        role varchar(255),
-        username varchar(255) not null,
+        hit integer,
+        title varchar(255) not null,
+        userId integer,
         primary key (id)
     )
 ```
