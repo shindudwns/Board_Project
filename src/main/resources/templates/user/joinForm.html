@@ -45,22 +45,27 @@
     <script>
         $(document).ready(function () {
             let isIdChecked = false;
-            $("#btn-doubleCheck").click(function () {
+
+            $("#loginId").change(function () {
+                isIdChecked = false;
+            });
+
+            $("#btn-doubleCheck").click(function () {   //중복확인 버튼을 눌렀을때
 
                 let data = {
-                    loginId: $("#loginId").val(),
+                    loginId: $("#loginId").val(),   //변수설정
                 }
 
                 $.ajax({
                     type: "POST",
                     url: "/auth/loginIdCheck",
-                    data: JSON.stringify(data),
+                    data: JSON.stringify(data), //data변수를 JSON형태로 변환
                     contentType: "application/json; charset=utf-8",
                     //dataType: "json", 받을 데이터 타입, 받는 데이터 타입이 달라서 error가 계속 발생
                     success: function (data) {
                         if (data == "사용가능") {
                             isIdChecked = true;
-                            $("#resultFalse").text("");
+                            $("#resultFalse").text(""); //id 값을 이용해서 ajax에서 값을 넣어주는것도 가능
                             $("#resultTrue").text("사용 가능한 아이디입니다!");
 
                         } else {

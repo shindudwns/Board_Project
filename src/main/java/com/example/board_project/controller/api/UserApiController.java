@@ -49,9 +49,7 @@ public class UserApiController {
     @PostMapping("/auth/loginIdCheck")
     @ResponseBody
     public String loginIdCheck(@RequestBody UserJoinDto userJoinDto) {
-
         User findUser = userService.loginIdCheck(userJoinDto.getLoginId());
-        System.out.println("-----------------------------------------------"+findUser);
         if (findUser != null) {
             return "중복";
         } else {
