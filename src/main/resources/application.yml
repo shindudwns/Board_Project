@@ -19,7 +19,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/blogproject?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
-    password: 123456
+    password: qkrtprjs0505
   thymeleaf:
     cache: false
 
@@ -28,7 +28,8 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
+
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         #DB컬럼에 저장될 이름의 전략을 설정(<- 이것은 java로 씌여져있는그대로 설정)

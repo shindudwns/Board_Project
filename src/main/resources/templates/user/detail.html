@@ -9,7 +9,7 @@
         <h2>내 정보</h2>
         </br>
         <button type="button" onclick="location.href ='/user/modifyForm'" class="btn btn-warning">정보수정</button>
-        <button type="submit" class="btn btn-danger" id="btn-danger">회원탈퇴</button>
+        <button type="button" class="btn btn-danger" id="btn-delete">회원탈퇴</button>
         <br><br>
         <div class="form-group">
             <label for="loginId"> 아이디 : </label>
@@ -46,11 +46,12 @@
 
     <script>
         $(document).ready(function(){
-            $("#btn-danger").click(function(){
+            $("#btn-delete").click(function(){
                 if(confirm("회원정보를 삭제하시겠습니까?")){
                     location.href='/user/delete';
                 }
             });
+
         });
 
     </script>

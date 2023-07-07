@@ -19,6 +19,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+
+
     @Transactional
     public void join(UserJoinDto userJoinDto) {
         User user = User.builder()
@@ -51,5 +54,10 @@ public class UserService {
     @Transactional
     public void delete(int id) {
         userRepository.deleteById(id);
+    }
+
+    public User loginIdCheck(String loginId) {
+        User user = userRepository.findByLoginId(loginId).orElse(null);
+        return user;
     }
 }

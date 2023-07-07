@@ -25,10 +25,10 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @Column(unique = true,nullable = false)
+    @Column(nullable = false)
     private String phoneNumber;
 
-    @Column(unique = true,nullable = false)
+    @Column(nullable = false)
     private String username;    //별명
 
     @Enumerated(EnumType.STRING)    //해당 Enum이 스트링이 라고 알려준다
