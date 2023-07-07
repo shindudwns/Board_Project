@@ -28,7 +28,7 @@ public class Reply {
 //    private Board board;  board를 추가하는 것이 맞을까 board한테 reply 목록이 있기때문에 고민
     @JoinColumn(name = "boardId")
     @ManyToOne
-    private Board board;
+    private Board board; //이걸 왜 여기다 써줘야되는지
 
     @CreationTimestamp
     private Timestamp createTime;
