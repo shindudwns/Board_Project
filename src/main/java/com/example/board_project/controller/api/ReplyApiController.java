@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class ReplyApiController {
@@ -19,15 +21,18 @@ public class ReplyApiController {
     private ReplyService replyService;
 
     @PostMapping("/reply/save")
-    public String replySave(ReplySaveDto replySaveDto, @AuthenticationPrincipal PrincipalDetail principalDetail){
+    @ResponseBody
+    public String replySave(@RequestBody ReplySaveDto replySaveDto, @AuthenticationPrincipal PrincipalDetail principalDetail){
+        System.out.println("-----------------------------------------------------"+replySaveDto);
+
         User user = principalDetail.getUser();
         replyService.join(replySaveDto,user);
-        return "redirect:/";
+        return "true";
     }
     @PostMapping("/reply/modify")
     public String modify(@ModelAttribute ReplyModifyDto replyModifyDto, Model model, @AuthenticationPrincipal PrincipalDetail principalDetail) {
         User loginUser = principalDetail.getUser();
-        System.out.println("================================="+replyModifyDto);
+       // System.out.println("================================="+replyModifyDto);
         Reply reply = replyService.modify(replyModifyDto);
         model.addAttribute("reply", reply);
         model.addAttribute("loginUser", loginUser);

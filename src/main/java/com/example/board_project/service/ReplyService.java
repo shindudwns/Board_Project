@@ -21,13 +21,16 @@ import java.util.List;
 public class ReplyService {
     @Autowired
     private ReplyRepository replyRepository;
+    @Autowired
+    private BoardRepository boardRepository;
 
     @Transactional
     public void join(ReplySaveDto replySaveDto, User user) {
-
+        Board board = boardRepository.findById(replySaveDto.getBoardId()).get();
         Reply reply = Reply.builder()
                 .content(replySaveDto.getContent())
                 .user(user)
+                .board(board)
                 .build();
         replyRepository.save(reply);
     }
