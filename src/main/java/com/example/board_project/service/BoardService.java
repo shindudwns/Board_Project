@@ -61,4 +61,9 @@ public class BoardService {
         Board board = boardRepository.findById(boardId).get();
         return board;
     }
+
+    public List<Board> searchBoard(String searchTitle) {
+        List<Board> boardList = boardRepository.findByTitleContaining(searchTitle);
+        return boardList;
+    }
 }

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
         xmlns:th="http://www.thymeleaf.org"
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layout/default_layout}">
@@ -11,7 +12,7 @@
         <br>
 
         <!--    수정했다   -->
-        <div th:if="${loginUser.id}==${board.user.id}">
+        <div sec:authorize="isAuthenticated()" th:if="${loginUser.id}==${board.user.id}">
 
             <!--      이부분 부터 시작-->
 
@@ -46,7 +47,7 @@
         <!--    jquery를 사용해서 데이터를 주기위한 input 태그-->
         <input id="boardId" type="hidden" th:value="${board.id}">
 
-        <div class="container">
+        <div sec:authorize="isAuthenticated()" class="container">
             <form id="commentForm" name="commentForm" method="post">
                 <br><br>
                 <div>

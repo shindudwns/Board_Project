@@ -11,10 +11,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class BoardApiController {
@@ -36,12 +35,14 @@ public class BoardApiController {
     }
 
     @PostMapping("/board/modify")
-    public String modify(@ModelAttribute BoardModifyDto boardModifyDto, Model model,@AuthenticationPrincipal PrincipalDetail principalDetail) {
+    public String modify(@ModelAttribute BoardModifyDto boardModifyDto, Model model, @AuthenticationPrincipal PrincipalDetail principalDetail) {
         User loginUser = principalDetail.getUser();
-        System.out.println("================================="+boardModifyDto);
-        Board board=boardService.modify(boardModifyDto);
+        System.out.println("=================================" + boardModifyDto);
+        Board board = boardService.modify(boardModifyDto);
         model.addAttribute("board", board);
         model.addAttribute("loginUser", loginUser);
         return "/board/detail";
     }
+
+
 }
