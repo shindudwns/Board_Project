@@ -40,14 +40,14 @@ public class ReplyService {
 //        List<Reply> replyList = replyRepository.findAll();
 //        return replyList;
 //    }
+    @Transactional
     public void deleteById(int replyId) {
         replyRepository.deleteById(replyId);
     }
 
     @Transactional
     public Reply modify(ReplyModifyDto replyModifyDto) {
-        Reply reply = replyRepository.findById(replyModifyDto.getId()).get();
-        reply.setContent(replyModifyDto.getContent());
+        Reply reply = replyRepository.findById(replyModifyDto.getReplyId()).get();
         replyRepository.save(reply);
         return reply;
     }

@@ -32,13 +32,18 @@ public class ReplyApiController {
         return byBoardId;
     }
     @PostMapping("/reply/modify")
-    public String modify(@ModelAttribute ReplyModifyDto replyModifyDto, Model model, @AuthenticationPrincipal PrincipalDetail principalDetail) {
-        User loginUser = principalDetail.getUser();
-       // System.out.println("================================="+replyModifyDto);
-        Reply reply = replyService.modify(replyModifyDto);
-        model.addAttribute("reply", reply);
-        model.addAttribute("loginUser", loginUser);
+    @ResponseBody
+    public String modify(@RequestBody ReplyModifyDto replyModifyDto) {
+       replyService.modify(replyModifyDto);
+
         return "/board/detail";
     }
-
+    @PostMapping("/reply/delete")
+    @ResponseBody
+    public String delete(@RequestBody ReplyModifyDto replyModifyDto) {
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+replyModifyDto);
+        replyService.deleteById(replyModifyDto.getReplyId());
+        List<Reply> byBoardId = replyService.findByBoardId(replyModifyDto.getBoardId());
+        return "byBoardId";
+    }
 }

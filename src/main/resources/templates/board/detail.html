@@ -112,11 +112,15 @@
             /*<![CDATA[*/
             let replyList = /*[[ ${replyList} ]]*/;
             /*]]*/
+            console.log(replyList);
             let replyHtml = "";
             for (let i = 0; i < replyList.length; i++) {
+                replyHtml += "<input id='replyId' type='hidden' value='"+replyList[i].id+"'></input>";
                 replyHtml += "<h2> 닉네임 : " + replyList[i].user.username + "</h2>";
                 replyHtml += "<h4> 댓글 내용 : " + replyList[i].content + "</h4>";
                 replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
+                replyHtml += "<button id='deleteReply' style='float: right' class='btn btn-danger'>삭제</button>";
+                replyHtml += "<button id='modifyReply' style='float: right' class='btn btn-warning'>수정</button>";
                 $("#locReplyList").html(replyHtml);
             }
         </script>
@@ -127,7 +131,23 @@
             /*
              * 댓글 등록하기(Ajax)
              */
+
+
             $(document).ready(function () {
+                function takeReplyList(replyList) {
+                    console.log(replyList);
+                    let replyHtml = "";
+                    for (let i = 0; i < replyList.length; i++) {
+                        replyHtml += "<input id='replyId' type='hidden' value='"+replyList[i].id+"'></input>";
+                        replyHtml += "<h2> 닉네임 : " + replyList[i].user.username + "</h2>";
+                        replyHtml += "<h4> 댓글 내용 : " + replyList[i].content + "</h4>";
+                        replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
+                        replyHtml += "<button id='deleteReply' style='float: right' class='btn btn-danger'>삭제</button>";
+                        replyHtml += "<button id='modifyReply' style='float: right' class='btn btn-warning'>수정</button>";
+                        $("#locReplyList").html(replyHtml);
+                    }
+                }
+
                 $("#saveReply").click(function () {
                     let data = {
                         boardId: $("#boardId").val(),
@@ -141,13 +161,53 @@
                         //dataType : "json", //디폴트 값으로 알아서 맞춰서 해준다
                         success: function (replyList) {
                             alert("댓글 작성 완료");
-                            let replyHtml = "";
-                            for (let i = 0; i < replyList.length; i++) {
-                                replyHtml += "<h2> 닉네임 : " + replyList[i].user.username + "</h2>";
-                                replyHtml += "<h4> 댓글 내용 : " + replyList[i].content + "</h4>";
-                                replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
-                                $("#locReplyList").html(replyHtml);
-                            }
+                            takeReplyList(replyList);
+                        },
+                        error: function (req, status, error) {
+                            alert("에러가 발생했습니다");
+                            console.log(req);
+                        },
+
+
+                    });
+                });
+                $("#modifyReply").click(function () {
+                    let data = {
+                        boardId: $("#boardId").val(),
+                        content: $("#replyContent").val()
+                    }
+                    $.ajax({
+                        url: "/reply/save",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: "application/json; charset=utf-8",
+                        //dataType : "json", //디폴트 값으로 알아서 맞춰서 해준다
+                        success: function (replyList) {
+                            alert("댓글 작성 완료");
+                            takeReplyList(replyList);
+                        },
+                        error: function (req, status, error) {
+                            alert("에러가 발생했습니다");
+                            console.log(req);
+                        },
+
+
+                    });
+                });
+                $("#deleteReply").click(function () {
+                    let data = {
+                        boardId: $("#boardId").val(),
+                        replyId:$("#replyId").val()
+                    }
+                    $.ajax({
+                        url: "/reply/delete",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: "application/json; charset=utf-8",
+                        //dataType : "json", //디폴트 값으로 알아서 맞춰서 해준다
+                        success: function (replyList) {
+                            alert("댓글 삭제 완료");
+                            takeReplyList(replyList);
                         },
                         error: function (req, status, error) {
                             alert("에러가 발생했습니다");

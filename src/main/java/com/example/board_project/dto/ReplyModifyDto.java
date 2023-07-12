@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReplyModifyDto {
 
-    private int id;
+    private int boardId;
 
-    private String content;
+    private int replyId;
 }
