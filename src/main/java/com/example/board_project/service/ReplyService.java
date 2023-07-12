@@ -25,20 +25,21 @@ public class ReplyService {
     private BoardRepository boardRepository;
 
     @Transactional
-    public void join(ReplySaveDto replySaveDto, User user) {
+    public Reply join(ReplySaveDto replySaveDto, User user) {
         Board board = boardRepository.findById(replySaveDto.getBoardId()).get();
+        board.setHit(board.getHit()-1);
         Reply reply = Reply.builder()
                 .content(replySaveDto.getContent())
                 .user(user)
                 .board(board)
                 .build();
         replyRepository.save(reply);
+        return reply;
     }
-    public List<Reply> takeAll() {
-        List<Reply> all = replyRepository.findAll();
-        return all;
-
-    }
+//    public List<Reply> takeAll() {
+//        List<Reply> replyList = replyRepository.findAll();
+//        return replyList;
+//    }
     public void deleteById(int replyId) {
         replyRepository.deleteById(replyId);
     }
@@ -60,5 +61,11 @@ public class ReplyService {
     public Reply modifyForm(int replyId) {
         Reply reply = replyRepository.findById(replyId).get();
         return reply;
+    }
+    @Transactional
+    public List<Reply> findByBoardId(int boardId) {
+        Board board = boardRepository.findById(boardId).get();
+        List<Reply> replyList = replyRepository.findByBoardId(boardId);
+        return replyList;
     }
 }

@@ -2,8 +2,10 @@ package com.example.board_project.controller;
 
 import com.example.board_project.config.auth.PrincipalDetail;
 import com.example.board_project.entity.Board;
+import com.example.board_project.entity.Reply;
 import com.example.board_project.entity.User;
 import com.example.board_project.service.BoardService;
+import com.example.board_project.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,9 @@ import java.util.List;
 public class BoardController {
     @Autowired
     private BoardService boardService;
+    @Autowired
+    private ReplyService replyService;
+
     @GetMapping("/board/write")
     public String write() {
         return "board/writeForm";
@@ -28,6 +33,8 @@ public class BoardController {
     public String loginDetailForm(@PathVariable int boardId, Model model, @AuthenticationPrincipal PrincipalDetail principalDetail) {
         User loginUser = principalDetail.getUser();
         Board board = boardService.detail(boardId);
+        List<Reply> replyList = replyService.findByBoardId(boardId);
+        model.addAttribute("replyList", replyList);
         model.addAttribute("board", board);
         model.addAttribute("loginUser", loginUser);
         return "/board/detail";
@@ -35,6 +42,8 @@ public class BoardController {
     @GetMapping("/auth/board/detail/{boardId}")
     public String detailForm(@PathVariable int boardId, Model model) {
         Board board = boardService.detail(boardId);
+        List<Reply> replyList = replyService.findByBoardId(boardId);
+        model.addAttribute("replyList", replyList);
         model.addAttribute("board", board);
         return "/board/detail";
     }

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 public class ReplyApiController {
     @Autowired
@@ -22,12 +24,12 @@ public class ReplyApiController {
 
     @PostMapping("/reply/save")
     @ResponseBody
-    public String replySave(@RequestBody ReplySaveDto replySaveDto, @AuthenticationPrincipal PrincipalDetail principalDetail){
-        System.out.println("-----------------------------------------------------"+replySaveDto);
-
+    public List<Reply> replySave(@RequestBody ReplySaveDto replySaveDto, @AuthenticationPrincipal PrincipalDetail principalDetail){
         User user = principalDetail.getUser();
-        replyService.join(replySaveDto,user);
-        return "true";
+        Reply reply = replyService.join(replySaveDto, user);
+        List<Reply> byBoardId = replyService.findByBoardId(replySaveDto.getBoardId());
+
+        return byBoardId;
     }
     @PostMapping("/reply/modify")
     public String modify(@ModelAttribute ReplyModifyDto replyModifyDto, Model model, @AuthenticationPrincipal PrincipalDetail principalDetail) {

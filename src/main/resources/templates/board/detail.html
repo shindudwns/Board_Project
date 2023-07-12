@@ -73,14 +73,13 @@
                 <input type="hidden" id="b_code" name="b_code" value="${result.code }"/>
             </form>
         </div>
-        <div class="container">
-            <form id="commentListForm" name="commentListForm" method="post">
-                <div id="commentList">
-                </div>
-            </form>
-        </div>
+        <ul class="list-group">
+            <h1 class="text-success">댓글</h1>
 
+            <div id="locReplyList" class="list-group-item"></div>
 
+        </ul>
+        <!--        <input id="replyList" type="hidden" th:value="${replyList}">-->
 
         <script>
             // 메인화면 페이지 로드 함수
@@ -91,7 +90,10 @@
                     height: 400,
                     maxHeight: 400
                 });
+
+
             });
+
 
         </script>
         <script>
@@ -106,7 +108,22 @@
             });
         </script>
 
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            let replyList = /*[[ ${replyList} ]]*/;
+            /*]]*/
+            let replyHtml = "";
+            for (let i = 0; i < replyList.length; i++) {
+                replyHtml += "<h2> 닉네임 : " + replyList[i].user.username + "</h2>";
+                replyHtml += "<h4> 댓글 내용 : " + replyList[i].content + "</h4>";
+                replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
+                $("#locReplyList").html(replyHtml);
+            }
+        </script>
+
         <script>
+            <!--            댓글 리스트 보여주는 함수-->
+
             /*
              * 댓글 등록하기(Ajax)
              */
@@ -116,28 +133,35 @@
                         boardId: $("#boardId").val(),
                         content: $("#replyContent").val()
                     }
-                    console.log(data);
                     $.ajax({
                         url: "/reply/save",
                         type: "POST",
                         data: JSON.stringify(data),
                         contentType: "application/json; charset=utf-8",
                         //dataType : "json", //디폴트 값으로 알아서 맞춰서 해준다
-                        success: function (data) {
-                            alert(data);
+                        success: function (replyList) {
+                            alert("댓글 작성 완료");
+                            let replyHtml = "";
+                            for (let i = 0; i < replyList.length; i++) {
+                                replyHtml += "<h2> 닉네임 : " + replyList[i].user.username + "</h2>";
+                                replyHtml += "<h4> 댓글 내용 : " + replyList[i].content + "</h4>";
+                                replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
+                                $("#locReplyList").html(replyHtml);
+                            }
                         },
-                        error: function (req,status,error) {
-
+                        error: function (req, status, error) {
+                            alert("에러가 발생했습니다");
                             console.log(req);
                         },
 
 
                     });
                 });
+
+
             });
 
         </script>
-
 
 
     </section>
