@@ -1,6 +1,7 @@
 package com.example.board_project.controller.api;
 
 import com.example.board_project.config.auth.PrincipalDetail;
+import com.example.board_project.dto.ReplyDeleteDto;
 import com.example.board_project.dto.ReplyModifyDto;
 import com.example.board_project.dto.ReplySaveDto;
 import com.example.board_project.entity.Reply;
@@ -40,10 +41,9 @@ public class ReplyApiController {
     }
     @PostMapping("/reply/delete")
     @ResponseBody
-    public String delete(@RequestBody ReplyModifyDto replyModifyDto) {
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+replyModifyDto);
-        replyService.deleteById(replyModifyDto.getReplyId());
-        List<Reply> byBoardId = replyService.findByBoardId(replyModifyDto.getBoardId());
-        return "byBoardId";
+    public List<Reply> delete(@RequestBody ReplyDeleteDto replyDeleteDto) {
+        replyService.deleteById(replyDeleteDto.getReplyId());
+        List<Reply> byBoardId = replyService.findByBoardId(replyDeleteDto.getBoardId());
+        return byBoardId;
     }
 }
