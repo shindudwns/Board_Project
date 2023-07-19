@@ -111,7 +111,7 @@
             for (let i = 0; i < replyList.length; i++) {
                 replyHtml += "<div reply_id='" + replyList[i].id + "'>";
                 replyHtml += "<h2> 닉네임 : " + replyList[i].user.username + "</h2>";
-                replyHtml += "<h4> 댓글 내용 : " + replyList[i].content + "</h4>";
+                replyHtml += "<h4 reply_content='"+replyList[i].content+"'> 댓글 내용 : " + replyList[i].content + "</h4>";
                 replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
                 replyHtml += "<button style='float: right' class='btn btn-danger'  name='deleteReply'>삭제</button>";
                 replyHtml += "<button style='float: right' class='btn btn-warning' name='modifyReply'>수정</button>";
@@ -122,12 +122,11 @@
 
         <script>
             function takeReplyList(replyList) {
-                console.log(replyList);
                 let replyHtml = "";
                 for (let i = 0; i < replyList.length; i++) {
                     replyHtml += "<div reply_id='" + replyList[i].id + "'>";
                     replyHtml += "<h2> 닉네임 : " + replyList[i].user.username + "</h2>";
-                    replyHtml += "<h4> 댓글 내용 : " + replyList[i].content + "</h4>";
+                    replyHtml += "<h4 reply_content='"+replyList[i].content+"'> 댓글 내용 : " + replyList[i].content + "</h4>";
                     replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
                     replyHtml += "<button style='float: right' class='btn btn-danger'  name='deleteReply'>삭제</button>";
                     replyHtml += "<button style='float: right' class='btn btn-warning' name='modifyReply'>수정</button>";
@@ -137,7 +136,7 @@
             }
         </script>
         <script>
-            $(document).on('click','[name=deleteReply]',function(){
+            $(document).on('click', '[name=deleteReply]', function () {
                 let data = {
                     boardId: $("#boardId").val(),
                     replyId: $(this).parent().attr("reply_id")
@@ -159,39 +158,56 @@
                     },
                 });
             })
+            $(document).on('click', '[name=modifyReply]', function () {
+                let data = {
+                    boardId: $("#boardId").val(),
+                    replyId: $(this).parent().attr("reply_id"),
+                    replyContent: $(this).siblings("h4").attr("reply_content")
+                }
+                let replyHtml = "";
+                for (let i = 0; i < replyList.length; i++) {
+                    replyHtml += "<div reply_id='" + replyList[i].id + "'>";
+                    replyHtml += "<h2> 닉네임 : " + replyList[i].user.username + "</h2>";
+                    if (replyList[i].id == data.replyId) {
+                        replyHtml += " <textarea  style=\"width: 1100px\" rows=\"3\" cols=\"30\" id=\"replyModifyContent\" name=\"content\" ></textarea>"
 
-            /*
-                        function modifyReply() {
-                            let data = {
-                                boardId: $("#boardId").val(),
-                                replyId: $("#replyId").val(),
-                                replyContent: $("#PreviewContent").val()
-                            }
-                            let replyHtml = "";
-                            for (let i = 0; i < replyList.length; i++) {
-                                replyHtml += "<input id='replyId' type='hidden' value='" + replyList[i].id + "'></input>";
-                                replyHtml += "<h2> 닉네임 : " + replyList[i].user.username + "</h2>";
-                                if (replyList[i].id == data.replyId) {
-                                    replyHtml += " <textarea  style=\"width: 1100px\" rows=\"3\" cols=\"30\" id=\"replyModifyContent\" name=\"content\" ></textarea>"
-
-                                } else {
-                                    replyHtml += "<h4> 댓글 내용 : " + replyList[i].content + "</h4>";
-                                }
-                                replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
-                                if (replyList[i].id == data.replyId) {
-                                    replyHtml += "<button style='float: right' class='btn btn-primary'  onclick='deleteReply()'>\수정</button>";
-                                } else {
-                                    replyHtml += "<button style='float: right' class='btn btn-danger'  onclick='deleteReply()'>삭제</button>";
-                                    replyHtml += "<button style='float: right' class='btn btn-warning' onclick='modifyReply()'>수정</button>";
-                                }
-
-                                $("#locReplyList").html(replyHtml);
-                            }
-                            $("#replyModifyContent").val(data.replyContent);
-                        }
-            */
-
-
+                    } else {
+                        replyHtml += "<h4> 댓글 내용 : " + replyList[i].content + "</h4>";
+                    }
+                    replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
+                    if (replyList[i].id == data.replyId) {
+                        replyHtml += "<button style='float: right' class='btn btn-primary'  name='modifyReplyDone'>수정</button>";
+                    } else {
+                        replyHtml += "<button style='float: right' class='btn btn-danger'  name='deleteReply'>삭제</button>";
+                        replyHtml += "<button style='float: right' class='btn btn-warning' name='modifyReply'>수정</button>";
+                    }
+                    replyHtml += "</div>";
+                }
+                $("#locReplyList").html(replyHtml);
+                $("#replyModifyContent").val(data.replyContent);
+            })
+            $(document).on('click', '[name=modifyReplyDone]', function () {
+                let data = {
+                    boardId: $("#boardId").val(),
+                    replyId: $(this).parent().attr("reply_id"),
+                    replyContent: $(this).siblings("textarea").val()
+                }
+                console.log(data);
+                $.ajax({
+                    url: "/reply/modify",
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (replyList) {
+                        alert("댓글 수정 완료");
+                        takeReplyList(replyList);
+                    },
+                    error: function (req, status, error) {
+                        alert("에러가 발생했습니다");
+                        console.log(req);
+                    }
+                })
+            })
             $(document).ready(function () {
                 $("#saveReply").click(function () {
                     let data = {
@@ -206,17 +222,12 @@
                         //dataType : "json", //디폴트 값으로 알아서 맞춰서 해준다
                         success: function (replyList) {
                             alert("댓글 작성 완료");
-
-
-                            $("#replyContent").val("");
                             takeReplyList(replyList);
                         },
                         error: function (req, status, error) {
                             alert("에러가 발생했습니다");
                             console.log(req);
-                        },
-
-
+                        }
                     });
                 });
             });

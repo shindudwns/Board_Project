@@ -34,10 +34,11 @@ public class ReplyApiController {
     }
     @PostMapping("/reply/modify")
     @ResponseBody
-    public String modify(@RequestBody ReplyModifyDto replyModifyDto) {
+    public List<Reply> modify(@RequestBody ReplyModifyDto replyModifyDto) {
+        System.out.println(replyModifyDto);
        replyService.modify(replyModifyDto);
-
-        return "/board/detail";
+        List<Reply> byBoardId = replyService.findByBoardId(replyModifyDto.getBoardId());
+        return byBoardId;
     }
     @PostMapping("/reply/delete")
     @ResponseBody

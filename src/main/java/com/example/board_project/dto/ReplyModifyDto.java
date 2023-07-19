@@ -14,5 +14,5 @@ public class ReplyModifyDto {
 
     private int replyId;
 
-    private String content;
+    private String replyContent;
 }

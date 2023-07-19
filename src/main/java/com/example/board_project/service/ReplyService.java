@@ -46,10 +46,9 @@ public class ReplyService {
     }
 
     @Transactional
-    public Reply modify(ReplyModifyDto replyModifyDto) {
+    public void modify(ReplyModifyDto replyModifyDto) {
         Reply reply = replyRepository.findById(replyModifyDto.getReplyId()).get();
-        replyRepository.save(reply);
-        return reply;
+        reply.setContent(replyModifyDto.getReplyContent());
     }
 
 //    @Transactional
@@ -57,11 +56,6 @@ public class ReplyService {
 //        Reply reply = replyRepository.findById(replyId).get();
 //        return reply;
 //    }
-
-    public Reply modifyForm(int replyId) {
-        Reply reply = replyRepository.findById(replyId).get();
-        return reply;
-    }
     @Transactional
     public List<Reply> findByBoardId(int boardId) {
         Board board = boardRepository.findById(boardId).get();
