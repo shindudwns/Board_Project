@@ -24,11 +24,6 @@ public class ReplyController {
     private ReplyService replyService;
 
 
-    @GetMapping("/board/delete/{replyId}")
-    public String delete(@PathVariable int replyId) {
-        replyService.deleteById(replyId);
-        return "redirect:/";
-    }
 
 
 }

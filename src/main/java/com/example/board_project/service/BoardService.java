@@ -7,6 +7,8 @@ import com.example.board_project.entity.Board;
 import com.example.board_project.entity.User;
 import com.example.board_project.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,9 +32,9 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-    public List<Board> takeAll() {
-        List<Board> all = boardRepository.findAll();
-        return all;
+    public Page<Board> takeAll(Pageable pageable) {
+        Page<Board> boardPage = boardRepository.findAll(pageable);
+        return boardPage;
 
     }
 
@@ -62,8 +64,8 @@ public class BoardService {
         return board;
     }
 
-    public List<Board> searchBoard(String searchTitle) {
-        List<Board> boardList = boardRepository.findByTitleContaining(searchTitle);
+    public Page<Board> searchBoard(String searchTitle,Pageable pageable) {
+        Page<Board> boardList = boardRepository.findByTitleContaining(searchTitle,pageable);
         return boardList;
     }
 }

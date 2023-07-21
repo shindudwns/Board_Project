@@ -7,6 +7,10 @@ import com.example.board_project.entity.User;
 import com.example.board_project.service.BoardService;
 import com.example.board_project.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,10 +60,17 @@ public class BoardController {
     }
 
     @GetMapping("/auth/board/search")
-    public String search(@RequestParam("searchTitle") String searchTitle, Model model) {
-        List<Board> boardList=boardService.searchBoard(searchTitle);
+    public String search(@RequestParam("searchTitle") String searchTitle, Model model,@PageableDefault(size = 8, page = 0, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Board> boardList=boardService.searchBoard(searchTitle,pageable);
+        System.out.println(boardList.getNumberOfElements());
+        int nowPage = boardList.getPageable().getPageNumber() + 1;
+        int startPage = (nowPage - 1) / 5 * 5 + 1;
+        int endPage = (startPage + 4 > boardList.getTotalPages()) ? boardList.getTotalPages() : startPage + 4;
         model.addAttribute("boardList", boardList);
         model.addAttribute("searchTitle", searchTitle);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("endPage", endPage);
         return "index";
     }
 }
