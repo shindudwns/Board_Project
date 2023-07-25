@@ -20,10 +20,5 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class ReplyController {
-    @Autowired
-    private ReplyService replyService;
-
-
-
 
 }

@@ -4,6 +4,7 @@ import com.example.board_project.entity.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,7 +18,7 @@ public class PrincipalDetail implements UserDetails {
         this.user = user;
     }
 
-
+@Transactional
     public User getUser() {
         return user;
     }

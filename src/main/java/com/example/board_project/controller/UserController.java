@@ -1,7 +1,10 @@
 package com.example.board_project.controller;
 
 import com.example.board_project.config.auth.PrincipalDetail;
+import com.example.board_project.dto.UserDto;
+import com.example.board_project.dto.UserSelectDto;
 import com.example.board_project.entity.User;
+import com.example.board_project.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UserController {
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping("/auth/joinForm")
     public String joinForm() {
         return "user/joinForm";
@@ -23,15 +32,15 @@ public class UserController {
 
     @GetMapping("/user/detail")
     public String detail(Model model, @AuthenticationPrincipal PrincipalDetail principalDetail) {
-        User user = principalDetail.getUser();
-        model.addAttribute("loginUser", user);
+        UserSelectDto userSelectDto = userService.takeLoginUser(principalDetail);
+        model.addAttribute("loginUser", userSelectDto);
         return "/user/detail";
     }
 
     @GetMapping("/user/modifyForm")
     public String modifyForm(Model model, @AuthenticationPrincipal PrincipalDetail principalDetail) {
-        User user = principalDetail.getUser();
-        model.addAttribute("loginUser", user);
+        UserSelectDto userSelectDto = userService.takeLoginUser(principalDetail);
+        model.addAttribute("loginUser", userSelectDto);
         return "/user/modifyForm";
     }
 

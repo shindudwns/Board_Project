@@ -10,7 +10,7 @@
 
     <section class="container">
         <br>
-        <div sec:authorize="isAuthenticated()" th:if="${loginUser.id}==${board.user.id}">
+        <div sec:authorize="isAuthenticated()" th:if="${loginUser.id}==${board.userDto.id}">
             <button type="button" th:onclick="|location.href='@{/board/modifyForm/{boardId}(boardId=${board.id})}'|"
                     class="btn btn-warning">글 수정&nbsp;
             </button>
@@ -24,7 +24,7 @@
         </div>
         <br>
         <div class="form-group">
-            <h1> 작성자 : [[${board.user.username}]]</h1>
+            <h1> 작성자 : [[${board.userDto.username}]]</h1>
         </div>
         <br>
         <div class="form-group">
@@ -65,7 +65,6 @@
                         </table>
                     </div>
                 </div>
-                <input type="hidden" id="b_code" name="b_code" value="${result.code }"/>
             </form>
         </div>
         <ul class="list-group">
@@ -105,16 +104,17 @@
 
         <script th:inline="javascript">
             /*<![CDATA[*/
-            let replyList = [[ ${replyList}]];
+            let replyList = [[${replyList}]];
             let loginUser = [[${loginUser}]];
             /*]]*/
+            console.log(replyList);
             let replyHtml = "";
             for (let i = 0; i < replyList.length; i++) {
                 replyHtml += "<div reply_id='" + replyList[i].id + "'>";
-                replyHtml += "<h2> 닉네임 : " + replyList[i].user.username + "</h2>";
+                replyHtml += "<h2> 닉네임 : " + replyList[i].userDto.username + "</h2>";
                 replyHtml += "<h4 reply_content='" + replyList[i].content + "'> 댓글 내용 : " + replyList[i].content + "</h4>";
                 replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
-                if(loginUser.id===replyList[i].user.id) {
+                if(loginUser.id===replyList[i].userDto.id) {
                     replyHtml += "<button style='float: right' class='btn btn-danger'  name='deleteReply'>삭제</button>";
                     replyHtml += "<button style='float: right' class='btn btn-warning' name='modifyReply'>수정</button>";
                 }
@@ -129,10 +129,10 @@
                 let replyHtml = "";
                 for (let i = 0; i < replyList.length; i++) {
                     replyHtml += "<div reply_id='" + replyList[i].id + "'>";
-                    replyHtml += "<h2> 닉네임 : " + replyList[i].user.username + "</h2>";
+                    replyHtml += "<h2> 닉네임 : " + replyList[i].userDto.username + "</h2>";
                     replyHtml += "<h4 reply_content='" + replyList[i].content + "'> 댓글 내용 : " + replyList[i].content + "</h4>";
                     replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
-                    if(loginUser.id===replyList[i].user.id) {
+                    if(loginUser.id===replyList[i].userDto.id) {
                         replyHtml += "<button style='float: right' class='btn btn-danger'  name='deleteReply'>삭제</button>";
                         replyHtml += "<button style='float: right' class='btn btn-warning' name='modifyReply'>수정</button>";
                     }
@@ -179,7 +179,7 @@
                 let replyHtml = "";
                 for (let i = 0; i < replyList.length; i++) {
                     replyHtml += "<div reply_id='" + replyList[i].id + "'>";
-                    replyHtml += "<h2> 닉네임 : " + replyList[i].user.username + "</h2>";
+                    replyHtml += "<h2> 닉네임 : " + replyList[i].userDto.username + "</h2>";
                     if (replyList[i].id == data.replyId) {
                         replyHtml += " <textarea  style=\"width: 1100px\" rows=\"3\" cols=\"30\" id=\"replyModifyContent\" name=\"content\" ></textarea>"
                     } else {
@@ -189,7 +189,7 @@
                     if (replyList[i].id == data.replyId) {
                         replyHtml += "<button style='float: right' class='btn btn-primary'  name='modifyReplyDone'>수정</button>";
                     } else {
-                        if(loginUser.id===replyList[i].user.id) {
+                        if(loginUser.id===replyList[i].userDto.id) {
                             replyHtml += "<button style='float: right' class='btn btn-danger'  name='deleteReply'>삭제</button>";
                             replyHtml += "<button style='float: right' class='btn btn-warning' name='modifyReply'>수정</button>";
                         }

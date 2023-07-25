@@ -10,6 +10,8 @@
     </br>
     </br>
     <form action="/user/modify" method="post">
+      <input type="hidden" class="form-control" id="id" th:value="${loginUser.id}" name="id">
+      <input type="hidden" class="form-control" id="createTime" th:value="${loginUser.createTime}" name="createTime">
       <div class="form-group">
         <label for="loginId"> 아이디 : </label>
         <input type="text" class="form-control" id="loginId" th:value="${loginUser.loginId}" name="loginId">
