@@ -8,6 +8,8 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+
+
 import java.sql.Timestamp;
 import java.util.List;
 @Getter
@@ -26,6 +28,8 @@ public class BoardDto { //오직 Board의 정보만 갖고있다.
 
     private int hit;    //board 가 작성되는 순간 0 으로 설정
 
+    private int userId;
+
     private Timestamp createTime;
 
     static public BoardDto boardToBoardDto(Board board) {
@@ -34,7 +38,7 @@ public class BoardDto { //오직 Board의 정보만 갖고있다.
                 .title(board.getTitle())
                 .content(board.getContent())
                 .hit(board.getHit())
-
+                .userId(board.getUser().getId())
                 .createTime(board.getCreateTime())
                 .build();
         return boardDto;

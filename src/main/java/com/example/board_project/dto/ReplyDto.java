@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.sql.Timestamp;
 
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -18,12 +19,18 @@ public class ReplyDto { //오직 Reply의 정보만 갖고있다.
 
     private String content;
 
+    private int userId;
+
+    private int boardId;
+
     private Timestamp createTime;
 
     static public ReplyDto replyToReplyDto(Reply reply) {
         ReplyDto replySelectDto = ReplyDto.builder()
                 .id(reply.getId())
                 .content(reply.getContent())
+                .userId(reply.getUser().getId())
+                .boardId(reply.getBoard().getId())
                 .createTime(reply.getCreateTime())
                 .build();
         return replySelectDto;

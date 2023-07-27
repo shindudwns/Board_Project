@@ -63,8 +63,16 @@ public class UserService {
     }
 
 
-    public User loginIdCheck(String loginId) {
-        User user = userRepository.findByLoginId(loginId).orElse(null);
+    public User saveIdCheck(String newLoginId) {
+        User user = userRepository.findByLoginId(newLoginId).orElse(null);
+        return user;
+    }
+    public User modifyIdCheck(String newLoginId,@AuthenticationPrincipal PrincipalDetail principalDetail) {
+        String loginId = principalDetail.getUser().getLoginId();
+        if(loginId.equals(newLoginId)){
+            return null;
+        }
+        User user = userRepository.findByLoginId(newLoginId).orElse(null);
         return user;
     }
 

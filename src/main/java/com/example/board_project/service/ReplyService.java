@@ -29,7 +29,7 @@ public class ReplyService {
     public void join(ReplySaveDto replySaveDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
         Board board = boardRepository.findById(replySaveDto.getBoardId()).get();
         User user = principalDetail.getUser();
-        board.setHit(board.getHit()-1);
+        board.setHit(board.getHit());
         Reply reply = Reply.builder()
                 .content(replySaveDto.getContent())
                 .user(user)

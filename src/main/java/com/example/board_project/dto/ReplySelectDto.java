@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.sql.Timestamp;
 
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -28,14 +29,13 @@ public class ReplySelectDto {
 
 
     static public ReplySelectDto replyToReplySelectDto(Reply reply) {
-        ReplySelectDto replySelectDto = ReplySelectDto.builder()
+        return ReplySelectDto.builder()
                 .id(reply.getId())
                 .content(reply.getContent())
                 .userDto(UserDto.userToUserDto(reply.getUser()))
                 .boardDto(BoardDto.boardToBoardDto(reply.getBoard()))
                 .createTime(reply.getCreateTime())
                 .build();
-        return replySelectDto;
 
     }
 }

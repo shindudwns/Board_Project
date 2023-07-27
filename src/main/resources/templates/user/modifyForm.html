@@ -60,7 +60,7 @@
 
         $.ajax({
           type: "POST",
-          url: "/auth/loginIdCheck",
+          url: "/auth/modifyIdCheck",
           data: JSON.stringify(data), //data변수를 JSON형태로 변환
           contentType: "application/json; charset=utf-8",
           //dataType: "json", 받을 데이터 타입, 받는 데이터 타입이 달라서 error가 계속 발생
@@ -83,6 +83,7 @@
           }
         });
       });
+
       $("#submitBtn").click(function (event) {
         event.preventDefault(); //버튼 클릭시submit되는것을 방지
         if (isIdChecked == true) {

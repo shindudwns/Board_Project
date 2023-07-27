@@ -11,7 +11,10 @@ server:
 
 # database 연동 설정
 spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
   mvc:
+
 #    view:
 #      prefix: WEB-INF/views/
 #      suffix: .html

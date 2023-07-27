@@ -6,6 +6,7 @@ import com.example.board_project.entity.RoleType;
 import com.example.board_project.entity.User;
 import lombok.*;
 
+
 import java.sql.Timestamp;
 import java.util.List;
 
