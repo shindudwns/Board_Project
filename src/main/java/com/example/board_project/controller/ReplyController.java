@@ -20,15 +20,5 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class ReplyController {
-    @Autowired
-    private ReplyService replyService;
-
-
-    @GetMapping("/board/delete/{replyId}")
-    public String delete(@PathVariable int replyId) {
-        replyService.deleteById(replyId);
-        return "redirect:/";
-    }
-
 
 }

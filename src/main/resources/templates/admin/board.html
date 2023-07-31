@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default_layout}">
+<div layout:fragment="content">
+    <!DOCTYPE html>
+
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <div class="container mt-3">
+        <h2>게시글 관리</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>게시글 번호</th>
+                <th>제목</th>
+                <th>조횟수</th>
+                <th>작성자 회원 번호</th>
+                <th>생성 시간</th>
+            </tr>
+            </thead>
+            <tr th:each="board:${boardList}">
+                <td th:text="${board.id}"></td>
+                <td th:text="${board.title}"></td>
+                <td th:text="${board.hit}"></td>
+                <td th:text="${board.userDto.id}"></td>
+                <td th:text="${board.createTime}"></td>
+            </tr>
+        </table>
+    </div>
+
+
+</div>
+
+</html>

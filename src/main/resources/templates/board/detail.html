@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
         xmlns:th="http://www.thymeleaf.org"
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layout/default_layout}">
@@ -9,16 +10,11 @@
 
     <section class="container">
         <br>
-
-        <!--    수정했다   -->
-        <div th:if="${loginUser.id}==${board.user.id}">
-
-            <!--      이부분 부터 시작-->
-
+        <div sec:authorize="isAuthenticated()" th:if="${loginUser.id}==${board.userDto.id}">
             <button type="button" th:onclick="|location.href='@{/board/modifyForm/{boardId}(boardId=${board.id})}'|"
                     class="btn btn-warning">글 수정&nbsp;
             </button>
-            <button type="submit" class="btn btn-danger" id="btn-danger">글 삭제</button>
+            <button type="submit" class="btn btn-danger" id="deleteBoard">글 삭제</button>
         </div>
 
 
@@ -28,7 +24,7 @@
         </div>
         <br>
         <div class="form-group">
-            <h1> 작성자 : [[${board.user.username}]]</h1>
+            <h1> 작성자 : [[${board.userDto.username}]]</h1>
         </div>
         <br>
         <div class="form-group">
@@ -46,7 +42,7 @@
         <!--    jquery를 사용해서 데이터를 주기위한 input 태그-->
         <input id="boardId" type="hidden" th:value="${board.id}">
 
-        <div class="container">
+        <div sec:authorize="isAuthenticated()" class="container">
             <form id="commentForm" name="commentForm" method="post">
                 <br><br>
                 <div>
@@ -69,17 +65,14 @@
                         </table>
                     </div>
                 </div>
-                <input type="hidden" id="b_code" name="b_code" value="${result.code }"/>
             </form>
         </div>
-        <div class="container">
-            <form id="commentListForm" name="commentListForm" method="post">
-                <div id="commentList">
-                </div>
-            </form>
-        </div>
+        <ul class="list-group">
+            <h1 class="text-success">댓글</h1>
 
+            <div id="locReplyList" class="list-group-item"></div>
 
+        </ul>
 
         <script>
             // 메인화면 페이지 로드 함수
@@ -90,14 +83,17 @@
                     height: 400,
                     maxHeight: 400
                 });
+
+
             });
+
 
         </script>
         <script>
 
             $(document).ready(function () {
                 let boardId = $("#boardId").val();
-                $("#btn-danger").click(function () {
+                $("#deleteBoard").click(function () {
                     if (confirm("정말로 글을 삭제하시겠습니까?")) {
                         location.href = '/board/delete/' + boardId;
                     }
@@ -105,38 +101,153 @@
             });
         </script>
 
+
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            let replyList = [[${replyList}]];
+            let loginUser = [[${loginUser}]];
+            /*]]*/
+            console.log(replyList);
+            let replyHtml = "";
+            for (let i = 0; i < replyList.length; i++) {
+                replyHtml += "<div reply_id='" + replyList[i].id + "'>";
+                replyHtml += "<h2> 닉네임 : " + replyList[i].userDto.username + "</h2>";
+                replyHtml += "<h4 reply_content='" + replyList[i].content + "'> 댓글 내용 : " + replyList[i].content + "</h4>";
+                replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
+                if(loginUser.id===replyList[i].userDto.id) {
+                    replyHtml += "<button style='float: right' class='btn btn-danger'  name='deleteReply'>삭제</button>";
+                    replyHtml += "<button style='float: right' class='btn btn-warning' name='modifyReply'>수정</button>";
+                }
+                replyHtml += "</div>";
+            }
+            $("#locReplyList").html(replyHtml);
+        </script>
+
         <script>
-            /*
-             * 댓글 등록하기(Ajax)
-             */
+            function takeReplyList(_replyList) {
+                replyList = _replyList;
+                let replyHtml = "";
+                for (let i = 0; i < replyList.length; i++) {
+                    replyHtml += "<div reply_id='" + replyList[i].id + "'>";
+                    replyHtml += "<h2> 닉네임 : " + replyList[i].userDto.username + "</h2>";
+                    replyHtml += "<h4 reply_content='" + replyList[i].content + "'> 댓글 내용 : " + replyList[i].content + "</h4>";
+                    replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
+                    if(loginUser.id===replyList[i].userDto.id) {
+                        replyHtml += "<button style='float: right' class='btn btn-danger'  name='deleteReply'>삭제</button>";
+                        replyHtml += "<button style='float: right' class='btn btn-warning' name='modifyReply'>수정</button>";
+                    }
+                    replyHtml += "</div>";
+                }
+                $("#locReplyList").html(replyHtml);
+            }
+        </script>
+        <script>
+            <!--            댓글 삭제-->
+            $(document).on('click', '[name=deleteReply]', function () {
+                if (confirm("댓글을 삭제하시겠습니까") == true) {
+                    let data = {
+                        boardId: $("#boardId").val(),
+                        replyId: $(this).parent().attr("reply_id")
+                    };
+
+                    $.ajax({
+                        url: "/reply/delete",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: "application/json; charset=utf-8",
+                        //dataType : "json", //디폴트 값으로 알아서 맞춰서 해준다
+                        success: function (replyList) {
+                            alert("댓글 삭제 완료");
+                            takeReplyList(replyList);
+                        },
+                        error: function (req, status, error) {
+                            alert("에러가 발생했습니다");
+                            console.log(req);
+                        },
+                    });
+                }
+            })
+            // 댓글 수정
+            $(document).on('click', '[name=modifyReply]', function () {
+                let data = {
+                    boardId: $("#boardId").val(),
+                    replyId: $(this).parent().attr("reply_id"),
+                    replyContent: $(this).siblings("h4").attr("reply_content")
+                }
+                console.log(data.replyId);
+                console.log(data.replyContent);
+                let replyHtml = "";
+                for (let i = 0; i < replyList.length; i++) {
+                    replyHtml += "<div reply_id='" + replyList[i].id + "'>";
+                    replyHtml += "<h2> 닉네임 : " + replyList[i].userDto.username + "</h2>";
+                    if (replyList[i].id == data.replyId) {
+                        replyHtml += " <textarea  style=\"width: 1100px\" rows=\"3\" cols=\"30\" id=\"replyModifyContent\" name=\"content\" ></textarea>"
+                    } else {
+                        replyHtml += "<h4 reply_content='" + replyList[i].content + "'> 댓글 내용 : " + replyList[i].content + "</h4>";
+                    }
+                    replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
+                    if (replyList[i].id == data.replyId) {
+                        replyHtml += "<button style='float: right' class='btn btn-primary'  name='modifyReplyDone'>수정</button>";
+                    } else {
+                        if(loginUser.id===replyList[i].userDto.id) {
+                            replyHtml += "<button style='float: right' class='btn btn-danger'  name='deleteReply'>삭제</button>";
+                            replyHtml += "<button style='float: right' class='btn btn-warning' name='modifyReply'>수정</button>";
+                        }
+                    }
+                    replyHtml += "</div>";
+                }
+                $("#locReplyList").html(replyHtml);
+                $("#replyModifyContent").val(data.replyContent);
+            })
+            // 댓글 수정후 버튼 클릭
+            $(document).on('click', '[name=modifyReplyDone]', function () {
+                let data = {
+                    boardId: $("#boardId").val(),
+                    replyId: $(this).parent().attr("reply_id"),
+                    replyContent: $(this).siblings("textarea").val()
+                }
+                console.log(data);
+                $.ajax({
+                    url: "/reply/modify",
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (replyList) {
+                        alert("댓글 수정 완료");
+                        takeReplyList(replyList);
+                    },
+                    error: function (req, status, error) {
+                        alert("에러가 발생했습니다");
+                        console.log(req);
+                    }
+                })
+            })
             $(document).ready(function () {
                 $("#saveReply").click(function () {
                     let data = {
                         boardId: $("#boardId").val(),
                         content: $("#replyContent").val()
                     }
-                    console.log(data);
                     $.ajax({
                         url: "/reply/save",
                         type: "POST",
                         data: JSON.stringify(data),
                         contentType: "application/json; charset=utf-8",
                         //dataType : "json", //디폴트 값으로 알아서 맞춰서 해준다
-                        success: function (data) {
-                            alert(data);
+                        success: function (replyList) {
+                            $("#replyContent").val("");
+                            alert("댓글 작성 완료");
+                            takeReplyList(replyList);
                         },
-                        error: function (req,status,error) {
-
+                        error: function (req, status, error) {
+                            alert("에러가 발생했습니다");
                             console.log(req);
-                        },
-
-
+                        }
                     });
                 });
             });
 
         </script>
-
 
 
     </section>

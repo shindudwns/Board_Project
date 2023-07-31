@@ -8,11 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReplyModifyDto {
+public class ReplyDeleteDto {
 
     private int boardId;
 
     private int replyId;
-
-    private String replyContent;
 }

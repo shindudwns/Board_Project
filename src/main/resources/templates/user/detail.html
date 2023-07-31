@@ -29,12 +29,22 @@
         <div class="form-group">
             <label for="phoneNumber"> 휴대폰 번호 : </label>
             <input th:value="${loginUser.phoneNumber}" type="text" class="form-control" id="phoneNumber"
-                   placeholder="Enter phonenumber" name="phoneNumber" readonly>
+                   placeholder="Enter phoneNumber" name="phoneNumber" readonly>
         </div>
         <div class="form-group">
             <label for="username"> 닉네임 : </label>
             <input th:value="${loginUser.username}" type="text" class="form-control" id="username"
                    placeholder="Enter username" name="username" readonly>
+        </div>
+        <div class="form-group">
+            <label for="createTime"> 글 개수 : </label>
+            <input th:value="${loginUser.boardDtoList.size()}" type="text" class="form-control" id="boardSize" name="boardSize"
+                   readonly>
+        </div>
+        <div class="form-group">
+            <label for="createTime"> 댓글 개수 : </label>
+            <input th:value="${loginUser.replyDtoList.size()}" type="text" class="form-control" id="replySize" name="replySize"
+                   readonly>
         </div>
         <div class="form-group">
             <label for="createTime"> 가입날짜 : </label>

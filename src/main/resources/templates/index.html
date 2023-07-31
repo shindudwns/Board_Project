@@ -1,27 +1,67 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default_layout}">
 <div layout:fragment="content">
+
+
+    <div style="float: right" class="collapse navbar-collapse" id="mynavbar">
+        <form action="/auth/board/search" class="d-flex" method="get">
+            <input th:value="${searchTitle}" id="search" class="form-control me-2" type="text" placeholder="제목 검색"
+                   name="searchTitle">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+    </div>
+
+
     <!-- Section-->
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
                 <tr th:each="board : ${boardList}">
-                    <a th:href="@{/board/detail/{board.id}(board.id=${board.id})}">
+                    <a sec:authorize="isAuthenticated()" th:href="@{/board/detail/{board.id}(board.id=${board.id})}">
                         <div class="col mb-5">
                             <div class="card h-100">
                                 <!-- Product details-->
                                 <div class="card-body p-4">
                                     <div class="text-center">
                                         <!-- Product name-->
-<!--수정후에 커밋되는지 확인-->
+                                        <!--수정후에 커밋되는지 확인-->
                                         <h1 th:text="${board.title}"></h1>
                                         <br><br>
                                         <div>
                                             작성자 :
-                                            <td th:text="${board.user.username}"></td>
+                                            <td th:text="${board.userDto.username}"></td>
+                                        </div>
+
+
+                                        <!-- Product price-->
+                                    </div>
+                                </div>
+                                <!-- Product actions-->
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <a sec:authorize="!isAuthenticated()"
+                       th:href="@{/auth/board/detail/{board.id}(board.id=${board.id})}">
+                        <div class="col mb-5">
+                            <div class="card h-100">
+                                <!-- Product details-->
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <!--수정후에 커밋되는지 확인-->
+                                        <h1 th:text="${board.title}"></h1>
+                                        <br><br>
+                                        <div>
+                                            작성자 :
+                                            <td th:text="${board.userDto.username}"></td>
                                         </div>
 
 
@@ -42,4 +82,40 @@
             </div>
         </div>
     </section>
+    <!--    페이징 처리-->
+    <div th:if="${boardList.getTotalElements()!=0}" style="text-align: center">
+        <ul class="pagination pagination-lg">
+            <li th:if="${nowPage>1&&searchTitle==null}" class="page-item"><a class="page-link"
+                                                                                     th:href="@{/(page=${nowPage}-2)}">Previous</a>
+            </li>
+            <li th:if="${nowPage>1&&searchTitle!=null}" class="page-item"><a class="page-link"
+                                                                                     th:href="@{/auth/board/search/(searchTitle=${searchTitle},page=${nowPage}-2)}">Previous</a>
+            </li>
+            <th:block th:each="page:${#numbers.sequence(startPage,endPage)}">
+                <li th:if="${page!=nowPage&&searchTitle==null}" class="page-item"><a class="page-link"
+                                                                                     th:href="@{/(page=${page}-1)}"
+                                                                                     th:text="${page}"></a></li>
+                <li th:if="${page!=nowPage&&searchTitle!=null}" class="page-item"><a class="page-link"
+                                                                                     th:href="@{/auth/board/search/(searchTitle=${searchTitle},page=${page}-1)}"
+                                                                                     th:text="${page}"></a>
+                </li>
+
+                <li th:if="${page==nowPage&&searchTitle==null}" class="page-item active">
+                    <a class="page-link" th:href="@{/(page=${page}-1)}" th:text="${page}"></a>
+                </li>
+                <li th:if="${page==nowPage&&searchTitle!=null}" class="page-item active"><a class="page-link"
+                                                                                     th:href="@{/auth/board/search/(searchTitle=${searchTitle},page=${page}-1)}"
+                                                                                     th:text="${page}"></a>
+                </li>
+            </th:block>
+            <li th:if="${nowPage<boardList.getTotalPages() &&searchTitle==null}" class="page-item"><a class="page-link"
+                                                                                   th:href="@{/(page=${nowPage})}">Next</a>
+            </li>
+            <li th:if="${nowPage<boardList.getTotalPages()&&searchTitle!=null}" class="page-item"><a class="page-link"
+                                                                                   th:href="@{/auth/board/search/(searchTitle=${searchTitle},page=${nowPage})}">Next</a>
+            </li>
+        </ul>
+    </div>
 </div>
+
+</html>

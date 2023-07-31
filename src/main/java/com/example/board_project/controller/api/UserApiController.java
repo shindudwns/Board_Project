@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,7 @@ public class UserApiController {
 
     @PostMapping("/user/modify")
     public String modify(@ModelAttribute UserModifyDto userModifyDto) {
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+userModifyDto);
         userService.modify(userModifyDto);
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(userModifyDto.getLoginId(), userModifyDto.getPassword()));
@@ -46,10 +48,21 @@ public class UserApiController {
         return "redirect:/logout";
     }
 
-    @PostMapping("/auth/loginIdCheck")
+    @PostMapping("/auth/saveIdCheck")
     @ResponseBody
     public String loginIdCheck(@RequestBody UserJoinDto userJoinDto) {
-        User findUser = userService.loginIdCheck(userJoinDto.getLoginId());
+        User findUser = userService.saveIdCheck(userJoinDto.getLoginId());
+        if (findUser != null) {
+            return "중복";
+        } else {
+            return "사용가능";
+        }
+
+    }
+    @PostMapping("/auth/modifyIdCheck")
+    @ResponseBody
+    public String loginIdCheck(@RequestBody UserJoinDto userJoinDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        User findUser = userService.modifyIdCheck(userJoinDto.getLoginId(),principalDetail);
         if (findUser != null) {
             return "중복";
         } else {
