@@ -1,6 +1,7 @@
 package com.example.board_project.dto;
 
 import com.example.board_project.entity.Board;
+import com.example.board_project.entity.Category;
 import com.example.board_project.entity.Reply;
 import lombok.*;
 
@@ -18,6 +19,8 @@ import java.util.List;
 public class BoardSelectDto {
 
     private int id;
+
+    private Category category;
 
     private String title;
 
@@ -40,6 +43,7 @@ public class BoardSelectDto {
         }
         BoardSelectDto boardDto = BoardSelectDto.builder()
                 .id(board.getId())
+                .category(board.getCategory())
                 .title(board.getTitle())
                 .content(board.getContent())
                 .hit(board.getHit())

@@ -17,8 +17,28 @@
 
     <!-- Section-->
     <section class="py-5">
+
+
         <div class="container px-4 px-lg-5 mt-5">
+
+
+            <div class="dropdown">
+                <strong style="font-size:20px">카테고리 설정 :</strong>
+                <button id="category" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                    모두보기
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">공지사항</a></li>
+                    <li><a class="dropdown-item" href="#">자유게시판</a></li>
+                    <li><a class="dropdown-item" href="#">QnA</a></li>
+                    <li><a class="dropdown-item" href="#">모두보기</a></li>
+                </ul>
+            </div>
+            <br>
+
+
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+
 
                 <tr th:each="board : ${boardList}">
                     <a sec:authorize="isAuthenticated()" th:href="@{/board/detail/{board.id}(board.id=${board.id})}">
@@ -86,10 +106,10 @@
     <div th:if="${boardList.getTotalElements()!=0}" style="text-align: center">
         <ul class="pagination pagination-lg">
             <li th:if="${nowPage>1&&searchTitle==null}" class="page-item"><a class="page-link"
-                                                                                     th:href="@{/(page=${nowPage}-2)}">Previous</a>
+                                                                             th:href="@{/(page=${nowPage}-2)}">Previous</a>
             </li>
             <li th:if="${nowPage>1&&searchTitle!=null}" class="page-item"><a class="page-link"
-                                                                                     th:href="@{/auth/board/search/(searchTitle=${searchTitle},page=${nowPage}-2)}">Previous</a>
+                                                                             th:href="@{/auth/board/search/(searchTitle=${searchTitle},page=${nowPage}-2)}">Previous</a>
             </li>
             <th:block th:each="page:${#numbers.sequence(startPage,endPage)}">
                 <li th:if="${page!=nowPage&&searchTitle==null}" class="page-item"><a class="page-link"
@@ -104,18 +124,45 @@
                     <a class="page-link" th:href="@{/(page=${page}-1)}" th:text="${page}"></a>
                 </li>
                 <li th:if="${page==nowPage&&searchTitle!=null}" class="page-item active"><a class="page-link"
-                                                                                     th:href="@{/auth/board/search/(searchTitle=${searchTitle},page=${page}-1)}"
-                                                                                     th:text="${page}"></a>
+                                                                                            th:href="@{/auth/board/search/(searchTitle=${searchTitle},page=${page}-1)}"
+                                                                                            th:text="${page}"></a>
                 </li>
             </th:block>
             <li th:if="${nowPage<boardList.getTotalPages() &&searchTitle==null}" class="page-item"><a class="page-link"
-                                                                                   th:href="@{/(page=${nowPage})}">Next</a>
+                                                                                                      th:href="@{/(page=${nowPage})}">Next</a>
             </li>
             <li th:if="${nowPage<boardList.getTotalPages()&&searchTitle!=null}" class="page-item"><a class="page-link"
-                                                                                   th:href="@{/auth/board/search/(searchTitle=${searchTitle},page=${nowPage})}">Next</a>
+                                                                                                     th:href="@{/auth/board/search/(searchTitle=${searchTitle},page=${nowPage})}">Next</a>
             </li>
         </ul>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $(".dropdown-item").click(function () {
+                let category=$(this).text()
+
+                $("#category").text(category);
+                alert(category);
+                $.ajax({
+                    url: "/auth/board/category",
+                    type: "GET",
+                    data: {"category" : category},
+                    contentType: "application/json; charset=euc-kr",
+                    //dataType : "json", //디폴트 값으로 알아서 맞춰서 해준다
+                    success: function (replyList) {
+                    },
+                    error: function (req, status, error) {
+                        alert("에러가 발생했습니다");
+                        console.log(req);
+                    },
+                })
+            });
+
+        });
+
+    </script>
 </div>
+
 
 </html>

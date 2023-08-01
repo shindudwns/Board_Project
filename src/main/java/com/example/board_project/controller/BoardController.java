@@ -3,6 +3,7 @@ package com.example.board_project.controller;
 import com.example.board_project.config.auth.PrincipalDetail;
 import com.example.board_project.dto.*;
 import com.example.board_project.entity.Board;
+import com.example.board_project.entity.Category;
 import com.example.board_project.service.BoardService;
 import com.example.board_project.service.ReplyService;
 import com.example.board_project.service.UserService;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -76,6 +78,23 @@ public class BoardController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("nowPage", nowPage);
         model.addAttribute("endPage", endPage);
+        return "index";
+    }
+
+    @GetMapping("/auth/board/category")
+    public String category(@RequestParam("category") Category category, Model model, @PageableDefault(size = 8, page = 0, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+
+
+        Page<BoardSelectDto> boardSelectDtoPage=boardService.categoryBoard(category,pageable);
+        int nowPage = boardSelectDtoPage.getPageable().getPageNumber() + 1;
+        int startPage = (nowPage - 1) / 5 * 5 + 1;
+        int endPage = (startPage + 4 > boardSelectDtoPage.getTotalPages()) ? boardSelectDtoPage.getTotalPages() : startPage + 4;
+        model.addAttribute("boardList", boardSelectDtoPage);
+        model.addAttribute("category", category);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("endPage", endPage);
+
         return "index";
     }
 }
