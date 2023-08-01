@@ -7,11 +7,24 @@
 
 
     <div style="float: right" class="collapse navbar-collapse" id="mynavbar">
-        <form action="/auth/board/search" class="d-flex" method="get">
-            <input th:value="${searchTitle}" id="search" class="form-control me-2" type="text" placeholder="제목 검색"
-                   name="searchTitle">
-            <button class="btn btn-primary" type="submit">Search</button>
-        </form>
+        <th:block th:if="${category=='모두보기'}">
+            <form action="/" class="d-flex" method="get">
+                <label for="search"></label><input th:value="${searchTitle}" id="search" class="form-control me-2" type="text" placeholder="제목 검색"
+                                                   name="searchTitle">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+        </th:block>
+        <th:block th:if="${category!='모두보기'}">
+            <form action="/" class="d-flex" method="get">
+                <label for="searchAndCategory"></label>
+                <input type="hidden" th:value="${category}" name="category">
+                <input th:value="${searchTitle}" id="searchAndCategory" class="form-control me-2" type="text" placeholder="제목 검색"
+                                                   name="searchTitle">
+
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+        </th:block>
+
     </div>
 
 
@@ -24,14 +37,19 @@
 
             <div class="dropdown">
                 <strong style="font-size:20px">카테고리 설정 :</strong>
-                <button id="category" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
-                    모두보기
+                <button id="category" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" th:text="${category}">
                 </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/auth/board/category?category=공지사항">공지사항</a></li>
-                    <li><a class="dropdown-item" href="/auth/board/category?category=자유게시판">자유게시판</a></li>
-                    <li><a class="dropdown-item" href="/auth/board/category?category=QnA">QnA</a></li>
-                    <li><a class="dropdown-item" href="/auth/board/category?category=모두보기">모두보기</a></li>
+                <ul th:if="${searchTitle==null}" class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/?category=공지사항">공지사항</a></li>
+                    <li><a class="dropdown-item" href="/?category=자유게시판">자유게시판</a></li>
+                    <li><a class="dropdown-item" href="/?category=QnA">QnA</a></li>
+                    <li><a class="dropdown-item" href="/?category=모두보기">모두보기</a></li>
+                </ul>
+                <ul th:if="${searchTitle!=null}" class="dropdown-menu">
+                    <li><a class="dropdown-item" th:href="@{/(category='공지사항',searchTitle=${searchTitle})}">공지사항</a></li>
+                    <li><a class="dropdown-item" th:href="@{/(category='자유게시판',searchTitle=${searchTitle})}">자유게시판</a></li>
+                    <li><a class="dropdown-item" th:href="@{/(category='QnA',searchTitle=${searchTitle})}">QnA</a></li>
+                    <li><a class="dropdown-item" th:href="@{/(category='모두보기',searchTitle=${searchTitle})}">모두보기</a></li>
                 </ul>
             </div>
             <br>

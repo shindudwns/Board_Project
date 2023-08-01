@@ -67,34 +67,34 @@ public class BoardController {
         return "/board/modifyForm";
     }
 
-    @GetMapping("/auth/board/search")
-    public String search(@RequestParam("searchTitle") String searchTitle, Model model,@PageableDefault(size = 8, page = 0, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<BoardSelectDto> boardSelectDtoPage=boardService.searchBoard(searchTitle,pageable);
-        int nowPage = boardSelectDtoPage.getPageable().getPageNumber() + 1;
-        int startPage = (nowPage - 1) / 5 * 5 + 1;
-        int endPage = (startPage + 4 > boardSelectDtoPage.getTotalPages()) ? boardSelectDtoPage.getTotalPages() : startPage + 4;
-        model.addAttribute("boardList", boardSelectDtoPage);
-        model.addAttribute("searchTitle", searchTitle);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("nowPage", nowPage);
-        model.addAttribute("endPage", endPage);
-        return "index";
-    }
-
-    @GetMapping("/auth/board/category")
-    public String category(@RequestParam("category") Category category, Model model, @PageableDefault(size = 8, page = 0, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-
-
-        Page<BoardSelectDto> boardSelectDtoPage=boardService.categoryBoard(category,pageable);
-        int nowPage = boardSelectDtoPage.getPageable().getPageNumber() + 1;
-        int startPage = (nowPage - 1) / 5 * 5 + 1;
-        int endPage = (startPage + 4 > boardSelectDtoPage.getTotalPages()) ? boardSelectDtoPage.getTotalPages() : startPage + 4;
-        model.addAttribute("boardList", boardSelectDtoPage);
-        model.addAttribute("category", category);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("nowPage", nowPage);
-        model.addAttribute("endPage", endPage);
-
-        return "index";
-    }
+//    @GetMapping("/auth/board/search")
+//    public String search(@RequestParam("searchTitle") String searchTitle, Model model,@PageableDefault(size = 8, page = 0, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+//        Page<BoardSelectDto> boardSelectDtoPage=boardService.searchBoard(searchTitle,pageable);
+//        int nowPage = boardSelectDtoPage.getPageable().getPageNumber() + 1;
+//        int startPage = (nowPage - 1) / 5 * 5 + 1;
+//        int endPage = (startPage + 4 > boardSelectDtoPage.getTotalPages()) ? boardSelectDtoPage.getTotalPages() : startPage + 4;
+//        model.addAttribute("boardList", boardSelectDtoPage);
+//        model.addAttribute("searchTitle", searchTitle);
+//        model.addAttribute("startPage", startPage);
+//        model.addAttribute("nowPage", nowPage);
+//        model.addAttribute("endPage", endPage);
+//        return "index";
+//    }
+//
+//    @GetMapping("/auth/board/category")
+//    public String category(@RequestParam("category") Category category, Model model, @PageableDefault(size = 8, page = 0, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+//
+//
+//        Page<BoardSelectDto> boardSelectDtoPage=boardService.categoryBoard(category,pageable);
+//        int nowPage = boardSelectDtoPage.getPageable().getPageNumber() + 1;
+//        int startPage = (nowPage - 1) / 5 * 5 + 1;
+//        int endPage = (startPage + 4 > boardSelectDtoPage.getTotalPages()) ? boardSelectDtoPage.getTotalPages() : startPage + 4;
+//        model.addAttribute("boardList", boardSelectDtoPage);
+//        model.addAttribute("category", category);
+//        model.addAttribute("startPage", startPage);
+//        model.addAttribute("nowPage", nowPage);
+//        model.addAttribute("endPage", endPage);
+//
+//        return "index";
+//    }
 }
