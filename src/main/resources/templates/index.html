@@ -28,10 +28,10 @@
                     모두보기
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">공지사항</a></li>
-                    <li><a class="dropdown-item" href="#">자유게시판</a></li>
-                    <li><a class="dropdown-item" href="#">QnA</a></li>
-                    <li><a class="dropdown-item" href="#">모두보기</a></li>
+                    <li><a class="dropdown-item" href="/auth/board/category?category=공지사항">공지사항</a></li>
+                    <li><a class="dropdown-item" href="/auth/board/category?category=자유게시판">자유게시판</a></li>
+                    <li><a class="dropdown-item" href="/auth/board/category?category=QnA">QnA</a></li>
+                    <li><a class="dropdown-item" href="/auth/board/category?category=모두보기">모두보기</a></li>
                 </ul>
             </div>
             <br>
@@ -137,31 +137,31 @@
         </ul>
     </div>
 
-    <script>
-        $(document).ready(function () {
-            $(".dropdown-item").click(function () {
-                let category=$(this).text()
+<!--    <script>-->
+<!--        $(document).ready(function () {-->
+<!--            $(".dropdown-item").click(function () {-->
+<!--                let category=$(this).text()-->
 
-                $("#category").text(category);
-                alert(category);
-                $.ajax({
-                    url: "/auth/board/category",
-                    type: "GET",
-                    data: {"category" : category},
-                    contentType: "application/json; charset=euc-kr",
-                    //dataType : "json", //디폴트 값으로 알아서 맞춰서 해준다
-                    success: function (replyList) {
-                    },
-                    error: function (req, status, error) {
-                        alert("에러가 발생했습니다");
-                        console.log(req);
-                    },
-                })
-            });
+<!--                $("#category").text(category);-->
+<!--                alert(category);-->
+<!--                $.ajax({-->
+<!--                    url: "/auth/board/category",-->
+<!--                    type: "GET",-->
+<!--                    data: {"category" : category},-->
+<!--                    contentType: "application/json; charset=euc-kr",-->
+<!--                    //dataType : "json", //디폴트 값으로 알아서 맞춰서 해준다-->
+<!--                    success: function (replyList) {-->
+<!--                    },-->
+<!--                    error: function (req, status, error) {-->
+<!--                        alert("에러가 발생했습니다");-->
+<!--                        console.log(req);-->
+<!--                    },-->
+<!--                })-->
+<!--            });-->
 
-        });
+<!--        });-->
 
-    </script>
+<!--    </script>-->
 </div>
 
 

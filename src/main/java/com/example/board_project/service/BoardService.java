@@ -94,17 +94,14 @@ public class BoardService {
     }
 
     public Page<BoardSelectDto> categoryBoard(Category category, Pageable pageable) {
-
         Page<BoardSelectDto> boardSelectDtoPage=null;
-        if (category.equals("모두보기")) {
+        if (category.getValue().equals("모두보기")) {
             boardSelectDtoPage = boardRepository.findAll(pageable)
                     .map(BoardSelectDto::boardToBoardSelectDto);
         } else {
-            System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@"+category);
-            boardSelectDtoPage = boardRepository.findByCategoryIs(category.getValue(), pageable)
+            boardSelectDtoPage = boardRepository.findByCategoryIs(category, pageable)
                     .map(BoardSelectDto::boardToBoardSelectDto);
         }
-
         return boardSelectDtoPage;
 
     }
