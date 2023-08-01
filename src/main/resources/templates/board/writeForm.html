@@ -1,12 +1,27 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default_layout}">
 <div layout:fragment="content">
     <!-- Section-->
 
     <section class="container">
         <h1>글 작성</h1>
+
         <form action="/board/save" method="post">
+            <label> 카테고리 : </label>
+            <div class="dropdown">
+                <button id="categories" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                    카테고리 설정
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">자유게시판</a></li>
+                    <li><a class="dropdown-item" href="#">QnA</a></li>
+                    <li><a class="dropdown-item" href="#">공지사항</a></li>
+                </ul>
+            </div>
+            <input type="text" class="form-control" id="category" placeholder="카테고리를 설정하세요" name="category" readonly>
+            <br>
             <div class="form-group">
                 <label for="title"> 제목 : </label>
                 <input type="text" class="form-control" id="title" placeholder="제목을 작성하세요" name="title">
@@ -17,9 +32,13 @@
                 <textarea id="summernote" name="content"></textarea>
             </div>
             </br>
-            <button type="submit" class="btn btn-primary" onclick="alert('글 작성 완료')">글 작성</button>
+            <div id="alert" class="alert alert-danger">
+                <strong></strong>
+            </div>
+            <button id="submitBtn" type="submit" class="btn btn-primary">글 작성</button>
         </form>
         <script>
+            document.getElementById("alert").style.display = "none";
     // 메인화면 페이지 로드 함수
     $(document).ready(function () {
         $('#summernote').summernote({
@@ -27,6 +46,30 @@
             height: 400,
             maxHeight: 400
         });
+
+//카테고리 입력해주는 함수
+        //카테고리의 변환을 감지하는 함수
+        let chkChange=false;
+        $(".dropdown-item").click(function () {
+            $("#category").val($(this).text());
+            document.getElementById("alert").style.display = "none";
+            chkChange=true;
+        });
+
+        //전송 버튼을 클릭했을때에 변환을 확인하고 전송
+        $("#submitBtn").click(function (event) {
+            event.preventDefault(); //버튼 클릭시submit되는것을 방지
+            if (chkChange == true) {
+                alert('글 작성 완료');
+                $("form").submit(); //폼태그를 submit한다
+            } else {
+                document.getElementById("alert").style.display = "";
+                $("strong").text("카테고리를 설정해주세요!")
+            }
+        });
+
+
+
     });
 
         </script>

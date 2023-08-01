@@ -33,7 +33,6 @@ public class UserApiController {
 
     @PostMapping("/user/modify")
     public String modify(@ModelAttribute UserModifyDto userModifyDto) {
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+userModifyDto);
         userService.modify(userModifyDto);
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(userModifyDto.getLoginId(), userModifyDto.getPassword()));

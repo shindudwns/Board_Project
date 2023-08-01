@@ -1,11 +1,11 @@
 package com.example.board_project.service;
 
 
-import com.example.board_project.dto.BoardDto;
 import com.example.board_project.dto.BoardModifyDto;
 import com.example.board_project.dto.BoardSaveDto;
 import com.example.board_project.dto.BoardSelectDto;
 import com.example.board_project.entity.Board;
+import com.example.board_project.entity.Category;
 import com.example.board_project.entity.User;
 import com.example.board_project.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +31,7 @@ public class BoardService {
                 .title(boardSaveDto.getTitle())
                 .content(boardSaveDto.getContent())
                 .user(user)
+                .category(boardSaveDto.getCategory())
                 .build();
         boardRepository.save(board);
     }
@@ -51,7 +52,8 @@ public class BoardService {
         Board board = boardRepository.findById(boardModifyDto.getId()).get();
         board.setTitle(boardModifyDto.getTitle());
         board.setContent(boardModifyDto.getContent());
-        board.setHit(board.getHit()-1);
+        board.setHit(board.getHit() - 1);
+        board.setCategory(boardModifyDto.getCategory());
         boardRepository.save(board);
         BoardSelectDto boardSelectDto = BoardSelectDto.boardToBoardSelectDto(board);
         return boardSelectDto;
@@ -60,8 +62,8 @@ public class BoardService {
 
     public BoardSelectDto detail(int boardId) {
         Board board = boardRepository.findById(boardId).get();
-        board.setHit(board.getHit()+1);
-        BoardSelectDto boardSelectDto =BoardSelectDto.boardToBoardSelectDto(board);
+        board.setHit(board.getHit() + 1);
+        BoardSelectDto boardSelectDto = BoardSelectDto.boardToBoardSelectDto(board);
         return boardSelectDto;
     }
 
@@ -71,7 +73,7 @@ public class BoardService {
         return boardSelectDto;
     }
 
-    public Page<BoardSelectDto> searchBoard(String searchTitle,Pageable pageable) {
+    public Page<BoardSelectDto> searchBoard(String searchTitle, Pageable pageable) {
         //boardRepository의 findByTitleContaining함수로 Page<Board> 객체를 갖고오고
         // 이 객체를 BoardSelectDto의 boardToBoardSelectDto함수를 사용해서 매핑한 객체를 갖고와라
         //맵 함수 기억하자!
@@ -80,6 +82,7 @@ public class BoardService {
 
         return boardSelectDtoPage;
     }
+
     public List<BoardSelectDto> findAll() {
         List<Board> boardList = boardRepository.findAll();
         List<BoardSelectDto> boardSelectDtoList = new ArrayList<>();
@@ -87,6 +90,22 @@ public class BoardService {
             boardSelectDtoList.add(BoardSelectDto.boardToBoardSelectDto(board));
         }
         return boardSelectDtoList;
+
+    }
+
+    public Page<BoardSelectDto> categoryBoard(Category category, Pageable pageable) {
+
+        Page<BoardSelectDto> boardSelectDtoPage=null;
+        if (category.equals("모두보기")) {
+            boardSelectDtoPage = boardRepository.findAll(pageable)
+                    .map(BoardSelectDto::boardToBoardSelectDto);
+        } else {
+            System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@"+category);
+            boardSelectDtoPage = boardRepository.findByCategoryIs(category.getValue(), pageable)
+                    .map(BoardSelectDto::boardToBoardSelectDto);
+        }
+
+        return boardSelectDtoPage;
 
     }
 }
