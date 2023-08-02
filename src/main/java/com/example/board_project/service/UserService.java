@@ -64,16 +64,14 @@ public class UserService {
 
 
     public User saveIdCheck(String newLoginId) {
-        User user = userRepository.findByLoginId(newLoginId).orElse(null);
-        return user;
+        return userRepository.findByLoginId(newLoginId).orElse(null);
     }
     public User modifyIdCheck(String newLoginId,@AuthenticationPrincipal PrincipalDetail principalDetail) {
         String loginId = principalDetail.getUser().getLoginId();
         if(loginId.equals(newLoginId)){
             return null;
         }
-        User user = userRepository.findByLoginId(newLoginId).orElse(null);
-        return user;
+        return userRepository.findByLoginId(newLoginId).orElse(null);
     }
 
     public List<UserSelectDto>  findAll() {
@@ -88,8 +86,7 @@ public class UserService {
 
     public UserSelectDto takeLoginUser(@AuthenticationPrincipal PrincipalDetail principalDetail) {
         User user = userRepository.findById(principalDetail.getUser().getId()).get();
-        UserSelectDto userSelectDto = UserSelectDto.userToUserSelectDto(user);
-        return userSelectDto;
+        return UserSelectDto.userToUserSelectDto(user);
 
     }
 }

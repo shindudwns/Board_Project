@@ -6,9 +6,7 @@ import com.example.board_project.service.ReplyService;
 import com.example.board_project.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -45,5 +43,10 @@ public class ReplyApiController {
         replyService.deleteById(replyDeleteDto.getReplyId());
         List<ReplySelectDto> replySelectDtoList = replyService.findByBoardId(replyDeleteDto.getBoardId());
         return replySelectDtoList;
+    }
+    @GetMapping("admin/reply/delete/{replyId}")
+    public String deleteFromAdmin(@PathVariable int replyId) {
+        replyService.deleteById(replyId);
+        return "redirect:/admin/reply";
     }
 }

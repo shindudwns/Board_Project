@@ -18,22 +18,118 @@
             <thead>
             <tr>
                 <th>게시글 번호</th>
+                <th>카테고리</th>
                 <th>제목</th>
                 <th>조횟수</th>
                 <th>작성자 회원 번호</th>
+                <th>댓글 수</th>
+
                 <th>생성 시간</th>
             </tr>
             </thead>
             <tr th:each="board:${boardList}">
-                <td th:text="${board.id}"></td>
+                <td th:text="${board.id}" name="boardId"></td>
+                <td th:text="${board.category}"></td>
                 <td th:text="${board.title}"></td>
                 <td th:text="${board.hit}"></td>
                 <td th:text="${board.userDto.id}"></td>
+                <td>
+                    <button type="button" class="btn btn-link" data-bs-toggle="modal" name="showReplyModal"
+                            th:text="${board.replyDtoList.size()}"></button>
+                </td>
                 <td th:text="${board.createTime}"></td>
+                <td><button class="btn btn-danger" name="deleteBoard">삭제</button></td>
             </tr>
         </table>
     </div>
 
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $("[name=deleteBoard]").click(function () {
+                let boardId = $(this).parent().siblings("[name=boardId]").text();
+                if(confirm("정말로 삭제하시겠습니까?")) {
+                    location.href = "/admin/board/delete/" + boardId;
+                }
+            });
+
+
+            let closeReplyModalBtn = document.getElementById("replyModalClose");
+            let replyModal = document.getElementById("replyModal");
+            $("[name=showReplyModal]").click(function () {
+
+                let boardId = $(this).parent().siblings("[name=boardId]").text();
+                /*<![CDATA[*/
+                let boardList = [[${boardList}]];
+                /*]]*/
+
+                let replyModalHtml = "";
+                for (let i = 0; i < boardList.length; i++) {
+                    if (boardList[i].id == boardId) {
+
+                        let replyList = boardList[i].replyDtoList;
+                        for (let i = 0; i < replyList.length; i++) {
+                            replyModalHtml += "<tr>";
+                            replyModalHtml += "<td>" + replyList[i].id + "</td>";
+                            replyModalHtml += "<td>" + replyList[i].content + "</td>";
+                            replyModalHtml += "<td>" + replyList[i].boardId + "</td>";
+                             replyModalHtml += "<td>" + replyList[i].userId + "</td>";
+                            replyModalHtml += "<td>" + replyList[i].createTime + "</td>";
+                            replyModalHtml += "</tr>";
+                        }
+                        break;
+                    }
+                }
+                $("#replyModalBody").html(replyModalHtml);
+                $("#replyModal").show();
+
+            });
+            closeReplyModalBtn.onclick = function () {
+                replyModal.style.display = "none";
+            };
+        });
+    </script>
+
+
+    <!-- 댓글   모달 부분-->
+    <div class="modal" id="replyModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">회원 관리</h4>
+                </div>
+
+                <!-- Modal body -->
+                <div>
+                    <table class="table">
+                        <thead>
+                        <tr>
+
+                            <th>댓글 번호</th>
+                            <th>내용</th>
+                            <th>해당 게시글</th>
+                            <th>작성자 회원 번호</th>
+                            <th>생성 시간</th>
+                        </tr>
+                        </thead>
+                        <tbody id="replyModalBody">
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button id="replyModalClose" type="button" class="btn btn-danger" data-bs-dismiss="modal">Close
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 </div>
 

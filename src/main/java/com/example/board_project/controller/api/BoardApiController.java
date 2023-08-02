@@ -39,6 +39,11 @@ public class BoardApiController {
         boardService.deleteById(boardId);
         return "redirect:/";
     }
+    @GetMapping("/admin/board/delete/{boardId}")
+    public String DeleteFromAdmin(@PathVariable int boardId) {
+        boardService.deleteById(boardId);
+        return "redirect:/admin/board";
+    }
 
     @PostMapping("/board/modify")
     public String modify(@ModelAttribute BoardModifyDto boardModifyDto, Model model, @AuthenticationPrincipal PrincipalDetail principalDetail) {

@@ -27,19 +27,26 @@
             </tr>
             </thead>
             <tr th:each="reply:${replyList}">
-                <td th:text="${reply.id}"></td>
+                <td name="replyId" th:text="${reply.id}"></td>
                 <td th:text="${reply.content}"></td>
                 <td th:text="${reply.boardDto.id}"></td>
                 <td th:text="${reply.userDto.id}"></td>
                 <td th:text="${reply.createTime}"></td>
-
+                  <td><button class="btn btn-danger" name="deleteReply">삭제</button></td>
             </tr>
 
 
         </table>
     </div>
 
-
+<script>
+    $("[name=deleteReply]").click(function () {
+        let replyId = $(this).parent().siblings("[name=replyId]").text();
+        if(confirm("정말로 삭제하시겠습니까?")) {
+            location.href = "/admin/reply/delete/" + replyId;
+        }
+    });
+</script>
 
 
 </div>
