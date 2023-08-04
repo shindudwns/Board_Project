@@ -6,6 +6,7 @@ import com.example.board_project.entity.User;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 
 @Getter
@@ -24,6 +25,10 @@ public class ReplySelectDto {
 
     private BoardDto boardDto; //이걸 왜 여기다 써줘야되는지
 
+    private Reply parent;
+
+    private List<Reply> child;
+
     private Timestamp createTime;
 
 
@@ -35,6 +40,8 @@ public class ReplySelectDto {
                 .userDto(UserDto.userToUserDto(reply.getUser()))
                 .boardDto(BoardDto.boardToBoardDto(reply.getBoard()))
                 .createTime(reply.getCreateTime())
+                .parent(reply.getParent())
+                .child(reply.getChild())
                 .build();
 
     }

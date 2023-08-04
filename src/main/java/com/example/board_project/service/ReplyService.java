@@ -20,17 +20,21 @@ import java.util.List;
 @Service
 @Transactional
 public class ReplyService {
-    @Autowired
-    private ReplyRepository replyRepository;
-    @Autowired
-    private BoardRepository boardRepository;
+    private final ReplyRepository replyRepository;
+    private final BoardRepository boardRepository;
 
+    public ReplyService(ReplyRepository replyRepository, BoardRepository boardRepository) {
+        this.replyRepository = replyRepository;
+        this.boardRepository = boardRepository;
+    }
 
     public void join(ReplySaveDto replySaveDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
-        Board board = boardRepository.findById(replySaveDto.getBoardId()).get();
+        Board board = boardRepository.findById(replySaveDto.getBoardId()).orElse(null);
         User user = principalDetail.getUser();
+     //   assert board != null;   //board가 null이면 오류를 찾아내기위한 assert문
         board.setHit(board.getHit());
         Reply reply = Reply.builder()
+                .parent(null)
                 .content(replySaveDto.getContent())
                 .user(user)
                 .board(board)
@@ -66,6 +70,21 @@ public class ReplyService {
             replySelectDtoList.add(ReplySelectDto.replyToReplySelectDto(reply));
         }
         return replySelectDtoList;
+    }
 
+    public List<ReplySelectDto> commentReply(ReplyDto replyDto,@AuthenticationPrincipal PrincipalDetail principalDetail) {
+        Board board = boardRepository.findById(replyDto.getBoardId()).orElse(null);
+        Reply parent = replyRepository.findById(replyDto.getParentId()).orElse(null);
+
+        Reply reply = Reply.builder()
+                .child(new ArrayList<>())
+                .parent(parent)
+                .board(board)
+                .content(replyDto.getContent())
+                .user(principalDetail.getUser())
+                .build();
+        replyRepository.save(reply);
+
+        return findAll();
     }
 }

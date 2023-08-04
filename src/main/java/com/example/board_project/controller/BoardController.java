@@ -57,6 +57,7 @@ public class BoardController {
         List<ReplySelectDto> replySelectDtoList = replyService.findByBoardId(boardId);
         model.addAttribute("replyList", replySelectDtoList);
         model.addAttribute("board", boardSelectDto);
+      //  model.addAttribute("loginUser", null);
         return "/board/detail";
     }
 

@@ -5,6 +5,7 @@ import com.example.board_project.dto.*;
 import com.example.board_project.service.ReplyService;
 import com.example.board_project.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +27,7 @@ public class ReplyApiController {
     @ResponseBody
     public List<ReplySelectDto> replySave(@RequestBody ReplySaveDto replySaveDto, @AuthenticationPrincipal PrincipalDetail principalDetail){
         replyService.join(replySaveDto,principalDetail);
-        List<ReplySelectDto> replySelectDtoList = replyService.findByBoardId(replySaveDto.getBoardId());
-        return replySelectDtoList;
+        return replyService.findByBoardId(replySaveDto.getBoardId());
     }
     @PostMapping("/reply/modify")
     @ResponseBody
@@ -48,5 +48,11 @@ public class ReplyApiController {
     public String deleteFromAdmin(@PathVariable int replyId) {
         replyService.deleteById(replyId);
         return "redirect:/admin/reply";
+    }
+    @PostMapping("/reply/commentSave")
+    @ResponseBody
+    public List<ReplySelectDto> commentSave(@RequestBody ReplyDto replyDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        return replyService.commentReply(replyDto, principalDetail);
     }
 }
