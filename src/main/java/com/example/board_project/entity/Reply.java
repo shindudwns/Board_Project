@@ -47,6 +47,10 @@ public class Reply {
     @JoinColumn(name = "parentId")
     private Reply parent;
 
+    //최상위 댓글인지 확인
+    @Column
+    private boolean rootReply;
+
     @JsonIgnoreProperties("parent")
     @OneToMany(mappedBy = "parent" ,fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Reply> child;

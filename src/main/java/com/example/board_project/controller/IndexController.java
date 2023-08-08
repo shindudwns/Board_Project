@@ -52,7 +52,6 @@ public class IndexController {
             boardSelectDtoPage = boardService.searchTitleAndCategory(searchTitle, category, pageable);
         }
 
-        System.out.println(boardSelectDtoPage.getTotalElements());
             int nowPage = boardSelectDtoPage.getPageable().getPageNumber() + 1;
             int startPage = (nowPage - 1) / 5 * 5 + 1;
             int endPage = (startPage + 4 > boardSelectDtoPage.getTotalPages()) ? boardSelectDtoPage.getTotalPages() : startPage + 4;
@@ -68,6 +67,7 @@ public class IndexController {
             }
 
              model.addAttribute("searchTitle", searchTitle);
+
             return "index";
     }
 }

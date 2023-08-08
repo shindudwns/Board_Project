@@ -59,8 +59,9 @@
                                 <td>
                                     <label for="replyContent">
 
-                                    </label><textarea style="width: 1100px" rows="3" cols="30" id="replyContent" name="content"
-                                                                                placeholder="댓글을 입력하세요"></textarea>
+                                    </label><textarea style="width: 1100px" rows="3" cols="30" id="replyContent"
+                                                      name="content"
+                                                      placeholder="댓글을 입력하세요"></textarea>
                                     <br>
                                     <div>
                                         <button type="button" id="saveReply" class="btn pull-right btn-success">등록
@@ -105,6 +106,38 @@
                     }
                 });
             });
+
+            function takeCommentReply(replyList,replyId) {
+                console.log(replyList);
+                let replyHtml = "";
+                for (let i = 0; i < replyList.length; i++) {
+                        replyHtml += "<div style='margin-left:50px' reply_id='" + replyList[i].id + "'>";
+                        replyHtml += "<h2>┗ &nbsp  닉네임 : " + replyList[i].userDto.username + "</h2>";
+                    if (replyList[i].id == replyId) {
+                        replyHtml += " <textarea  style=\"width: 1100px\" rows=\"3\" cols=\"30\" id=\"commentReplyContent\" name=\"content\" ></textarea>"
+                    } else {
+                        replyHtml += "<h4 reply_content='" + replyList[i].content + "'> 댓글 내용 : " + replyList[i].content + "</h4>";
+                    }
+                    replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
+                    if (replyList[i].id == replyId) {
+                        replyHtml += "<button style='float: right' class='btn btn-primary'  name='commentReplyDone'>대댓글 달기</button>";
+                    } else {
+                        if (loginUser != null) {
+                            if (loginUser.id === replyList[i].userDto.id) {
+                                replyHtml += "<button style='float: right' class='btn btn-danger'  name='deleteReply'>삭제</button>";
+                                replyHtml += "<button style='float: right' class='btn btn-warning' name='modifyReply'>수정</button>";
+                            }
+                            replyHtml += "<button style='float: left' class='btn btn-primary'  name='commentReply'>대댓글 달기</button>";
+                            replyHtml += "<br><br>"
+                        }
+                    }
+                    if (replyList[i].child.length > 0) {    //대댓글이 있다면
+                        replyHtml += takeCommentReply(replyList[i].child,replyId);
+                    }
+                    replyHtml += "</div>";
+                }
+                return replyHtml;
+            }
         </script>
 
 
@@ -116,22 +149,25 @@
 
             let replyHtml = "";
             for (let i = 0; i < replyList.length; i++) {
-                replyHtml += "<div reply_id='" + replyList[i].id + "'>";
-                replyHtml += "<h2> 닉네임 : " + replyList[i].userDto.username + "</h2>";
-                replyHtml += "<h4 reply_content='" + replyList[i].content + "'> 댓글 내용 : " + replyList[i].content + "</h4>";
-                replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
+                if(replyList[i].rootReply==true) {
+                    replyHtml += "<div reply_id='" + replyList[i].id + "'>";
+                    replyHtml += "<h2> 닉네임 : " + replyList[i].userDto.username + "</h2>";
+                    replyHtml += "<h4 reply_content='" + replyList[i].content + "'> 댓글 내용 : " + replyList[i].content + "</h4>";
+                    replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
+                    if (loginUser != null) {
+                        if (loginUser.id === replyList[i].userDto.id) {
+                            replyHtml += "<button style='float: right' class='btn btn-danger'  name='deleteReply'>삭제</button>";
+                            replyHtml += "<button style='float: right' class='btn btn-warning' name='modifyReply'>수정</button>";
+                        }
+                        replyHtml += "<button style='float: left' class='btn btn-primary'  name='commentReply'>대댓글 달기</button>";
+                        replyHtml += "<br><br>"
+                    }
+                    if(replyList[i].child.length>0){    //대댓글이 있다면
+                        replyHtml+=takeCommentReply(replyList[i].child);
+                    }
 
-                if(loginUser!=null){
-
-                    if(loginUser.id === replyList[i].userDto.id) {
-                        replyHtml += "<button style='float: right' class='btn btn-danger'  name='deleteReply'>삭제</button>";
-                        replyHtml += "<button style='float: right' class='btn btn-warning' name='modifyReply'>수정</button>";
-                 }
-                    replyHtml += "<button style='float: left' class='btn btn-primary'  name='commentReply'>대댓글 달기</button>";
-                    replyHtml +="<br><br>"
+                    replyHtml += "</div>";
                 }
-                replyHtml += "</div>";
-
             }
             $("#locReplyList").html(replyHtml);
         </script>
@@ -141,20 +177,25 @@
                 replyList = _replyList;
                 let replyHtml = "";
                 for (let i = 0; i < replyList.length; i++) {
-                    replyHtml += "<div reply_id='" + replyList[i].id + "'>";
-                    replyHtml += "<h2> 닉네임 : " + replyList[i].userDto.username + "</h2>";
-                    replyHtml += "<h4 reply_content='" + replyList[i].content + "'> 댓글 내용 : " + replyList[i].content + "</h4>";
-                    replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
-                    if(loginUser!=null){
-
-                        if(loginUser.id === replyList[i].userDto.id) {
-                            replyHtml += "<button style='float: right' class='btn btn-danger'  name='deleteReply'>삭제</button>";
-                            replyHtml += "<button style='float: right' class='btn btn-warning' name='modifyReply'>수정</button>";
+                    if(replyList[i].rootReply==true) {
+                        replyHtml += "<div reply_id='" + replyList[i].id + "'>";
+                        replyHtml += "<h2> 닉네임 : " + replyList[i].userDto.username + "</h2>";
+                        replyHtml += "<h4 reply_content='" + replyList[i].content + "'> 댓글 내용 : " + replyList[i].content + "</h4>";
+                        replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
+                        if (loginUser != null) {
+                            if (loginUser.id === replyList[i].userDto.id) {
+                                replyHtml += "<button style='float: right' class='btn btn-danger'  name='deleteReply'>삭제</button>";
+                                replyHtml += "<button style='float: right' class='btn btn-warning' name='modifyReply'>수정</button>";
+                            }
+                            replyHtml += "<button style='float: left' class='btn btn-primary'  name='commentReply'>대댓글 달기</button>";
+                            replyHtml += "<br><br>"
                         }
-                        replyHtml += "<button style='float: left' class='btn btn-primary'  name='commentReply'>대댓글 달기</button>";
-                        replyHtml +="<br><br>"
+                        if(replyList[i].child.length>0){    //대댓글이 있다면
+                            replyHtml+=takeCommentReply(replyList[i].child);
+                        }
+
+                        replyHtml += "</div>";
                     }
-                    replyHtml += "</div>";
                 }
                 $("#locReplyList").html(replyHtml);
             }
@@ -162,35 +203,42 @@
         <script>
             //대댓글 작성
             $(document).on('click', '[name=commentReply]', function () {
+
                 let data = {
                     boardId: $("#boardId").val(),
                     replyId: $(this).parent().attr("reply_id"),
                 }
-                console.log(data.replyId);
-                console.log(data.replyContent);
                 let replyHtml = "";
+                console.log(replyList);
                 for (let i = 0; i < replyList.length; i++) {
-                    replyHtml += "<div reply_id='" + replyList[i].id + "'>";
-                    replyHtml += "<h2> 닉네임 : " + replyList[i].userDto.username + "</h2>";
-                    if (replyList[i].id == data.replyId) {
-                        replyHtml += " <textarea  style=\"width: 1100px\" rows=\"3\" cols=\"30\" id=\"commentReplyContent\" name=\"content\" ></textarea>"
-                    } else {
-                        replyHtml += "<h4 reply_content='" + replyList[i].content + "'> 댓글 내용 : " + replyList[i].content + "</h4>";
-                    }
-                    replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
-                    if (replyList[i].id == data.replyId) {
-                        replyHtml += "<button style='float: right' class='btn btn-primary'  name='commentReplyDone'>대댓글 달기</button>";
-                    } else {
-                        if(loginUser!=null){
-                            if(loginUser.id === replyList[i].userDto.id) {
-                                replyHtml += "<button style='float: right' class='btn btn-danger'  name='deleteReply'>삭제</button>";
-                                replyHtml += "<button style='float: right' class='btn btn-warning' name='modifyReply'>수정</button>";
-                            }
-                            replyHtml += "<button style='float: left' class='btn btn-primary'  name='commentReply'>대댓글 달기</button>";
-                            replyHtml +="<br><br>"
+                    if(replyList[i].rootReply==true) {
+                        replyHtml += "<div reply_id='" + replyList[i].id + "'>";
+                        replyHtml += "<h2> 닉네임 : " + replyList[i].userDto.username + "</h2>";
+                        console.log(replyList[i].id+" "+data.replyId);
+                        if (replyList[i].id == data.replyId) {
+                            replyHtml += " <textarea  style=\"width: 1100px\" rows=\"3\" cols=\"30\" id=\"commentReplyContent\" name=\"content\" ></textarea>"
+                        } else {
+                            replyHtml += "<h4 reply_content='" + replyList[i].content + "'> 댓글 내용 : " + replyList[i].content + "</h4>";
                         }
+                        replyHtml += "<p style='text-align: right'> 작성 시간 : " + replyList[i].createTime + "</p>";
+                        if (replyList[i].id == data.replyId) {
+                            replyHtml += "<button style='float: right' class='btn btn-primary'  name='commentReplyDone'>대댓글 달기</button>";
+                        } else {
+                            if (loginUser != null) {
+                                if (loginUser.id === replyList[i].userDto.id) {
+                                    replyHtml += "<button style='float: right' class='btn btn-danger'  name='deleteReply'>삭제</button>";
+                                    replyHtml += "<button style='float: right' class='btn btn-warning' name='modifyReply'>수정</button>";
+                                }
+                                replyHtml += "<button style='float: left' class='btn btn-primary'  name='commentReply'>대댓글 달기</button>";
+                                replyHtml += "<br><br>"
+                            }
+                        }
+                        if (replyList[i].child.length > 0) {    //대댓글이 있다면
+                            replyHtml += takeCommentReply(replyList[i].child,data.replyId);
+                        }
+
+                        replyHtml += "</div>";
                     }
-                    replyHtml += "</div>";
                 }
                 $("#locReplyList").html(replyHtml);
                 $("#replyModifyContent").val(data.replyContent);
@@ -210,11 +258,10 @@
                     contentType: "application/json; charset=utf-8",
                     success: function (replyList) {
                         alert("대댓글 작성완료");
-                        console.log(replyList);
-                        //takeReplyList(replyList);
+                        takeReplyList(replyList);
                     },
                     error: function (req, status, error) {
-                        alert("에러가 발생했습니다");
+                        alert("대댓글 클릭후 에러가 발생했습니다");
                         console.log(req);
                     }
                 })
@@ -266,14 +313,14 @@
                     if (replyList[i].id == data.replyId) {
                         replyHtml += "<button style='float: right' class='btn btn-primary'  name='modifyReplyDone'>수정</button>";
                     } else {
-                        if(loginUser!=null){
+                        if (loginUser != null) {
 
-                            if(loginUser.id === replyList[i].userDto.id) {
+                            if (loginUser.id === replyList[i].userDto.id) {
                                 replyHtml += "<button style='float: right' class='btn btn-danger'  name='deleteReply'>삭제</button>";
                                 replyHtml += "<button style='float: right' class='btn btn-warning' name='modifyReply'>수정</button>";
                             }
                             replyHtml += "<button style='float: left' class='btn btn-primary'  name='commentReply'>대댓글 달기</button>";
-                            replyHtml +="<br><br>"
+                            replyHtml += "<br><br>"
                         }
                     }
                     replyHtml += "</div>";

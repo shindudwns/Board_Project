@@ -16,7 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString
-public class ReplySelectDto {
+//대댓글 기능을 사용하기위한 Dto
+public class ReplyCommentDto {
 
     private int id;
 
@@ -30,20 +31,20 @@ public class ReplySelectDto {
 
     private ReplyDto parent;
 
-    private List<ReplyDto> child;
+    private List<ReplyCommentDto> child;
 
     private Timestamp createTime;
 
 
-    static public ReplySelectDto replyToReplySelectDto(Reply reply) {
+    static public ReplyCommentDto replyToReplyCommentDto(Reply reply) {
+        System.out.println(reply.getChild());
         List<Reply> replyList = reply.getChild();
-        List<ReplyDto> replyDtoList = new ArrayList<>();
+        List<ReplyCommentDto> replyCommentDtoList = new ArrayList<>();
         for (Reply reply1 : replyList) {
-            replyDtoList.add(ReplyDto.replyToReplyDto(reply1));
+            replyCommentDtoList.add(ReplyCommentDto.replyToReplyCommentDto(reply1));
         }
-
         if (reply.isRootReply()) {
-            return ReplySelectDto.builder()
+            return ReplyCommentDto.builder()
                     .id(reply.getId())
                     .content(reply.getContent())
                     .userDto(UserDto.userToUserDto(reply.getUser()))
@@ -51,10 +52,10 @@ public class ReplySelectDto {
                     .rootReply(reply.isRootReply())
                     .parent(null)
                     .createTime(reply.getCreateTime())
-                    .child(replyDtoList)
+                    .child(replyCommentDtoList)
                     .build();
         } else {
-            return ReplySelectDto.builder()
+            return ReplyCommentDto.builder()
                     .id(reply.getId())
                     .content(reply.getContent())
                     .userDto(UserDto.userToUserDto(reply.getUser()))
@@ -62,7 +63,7 @@ public class ReplySelectDto {
                     .createTime(reply.getCreateTime())
                     .rootReply(reply.isRootReply())
                     .parent(ReplyDto.replyToReplyDto(reply.getParent()))
-                    .child(replyDtoList)
+                    .child(replyCommentDtoList)
                     .build();
         }
     }

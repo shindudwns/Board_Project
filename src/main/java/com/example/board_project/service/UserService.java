@@ -46,7 +46,6 @@ public class UserService {
 
 
     public void modify(UserModifyDto userModifyDto) {
-        System.out.println(userModifyDto);
         User user = userRepository.findById(userModifyDto.getId()).get();
         user.setLoginId(userModifyDto.getLoginId());
         user.setPassword(encoder.encode(userModifyDto.getPassword()));

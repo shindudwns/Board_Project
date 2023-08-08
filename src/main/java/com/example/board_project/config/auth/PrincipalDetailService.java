@@ -22,7 +22,7 @@ public class PrincipalDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("로그인했던 아이디입니다 : " +username);
+
         User user = userRepository.findByLoginId(username).orElseThrow(() -> {
             return new UsernameNotFoundException("해당 아이디를 찾을수 없습니다!");
         });

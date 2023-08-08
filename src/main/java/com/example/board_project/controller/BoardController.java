@@ -45,8 +45,8 @@ public class BoardController {
     public String loginDetailForm(@PathVariable int boardId, Model model, @AuthenticationPrincipal PrincipalDetail principalDetail) {
         UserSelectDto userSelectDto = userService.takeLoginUser(principalDetail);
         BoardSelectDto boardSelectDto = boardService.detail(boardId);
-        List<ReplySelectDto> replySelectDtoList = replyService.findByBoardId(boardId);
-        model.addAttribute("replyList", replySelectDtoList);
+        List<ReplyCommentDto> replyCommentDtoList = replyService.findByBoardId(boardId);
+        model.addAttribute("replyList", replyCommentDtoList);
         model.addAttribute("board", boardSelectDto);
         model.addAttribute("loginUser", userSelectDto);
         return "/board/detail";
@@ -54,8 +54,8 @@ public class BoardController {
     @GetMapping("/auth/board/detail/{boardId}")
     public String detailForm(@PathVariable int boardId, Model model) {
         BoardSelectDto boardSelectDto = boardService.detail(boardId);
-        List<ReplySelectDto> replySelectDtoList = replyService.findByBoardId(boardId);
-        model.addAttribute("replyList", replySelectDtoList);
+        List<ReplyCommentDto> replyCommentDtoList = replyService.findByBoardId(boardId);
+        model.addAttribute("replyList", replyCommentDtoList);
         model.addAttribute("board", boardSelectDto);
       //  model.addAttribute("loginUser", null);
         return "/board/detail";

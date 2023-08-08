@@ -25,7 +25,10 @@ public class ReplyDto { //오직 Reply의 정보만 갖고있다.
 
     private int boardId;
 
+    private boolean rootReply;
+
     private int parentId;
+
 
     private List<Integer> childId;
 
@@ -37,14 +40,28 @@ public class ReplyDto { //오직 Reply의 정보만 갖고있다.
         for (Reply reply1 : child) {
             integerList.add(reply1.getId());
         }
-        return ReplyDto.builder()
-                .id(reply.getId())
-                .content(reply.getContent())
-                .userId(reply.getUser().getId())
-                .boardId(reply.getBoard().getId())
-                .createTime(reply.getCreateTime())
-                .parentId(reply.getParent().getId())
-                .childId(integerList)
-                .build();
+        if(reply.isRootReply()){
+            return ReplyDto.builder()
+                    .id(reply.getId())
+                    .content(reply.getContent())
+                    .userId(reply.getUser().getId())
+                    .boardId(reply.getBoard().getId())
+                    .rootReply(reply.isRootReply())
+                    .parentId(0)
+                    .createTime(reply.getCreateTime())
+                    .childId(integerList)
+                    .build();
+        }else{
+            return ReplyDto.builder()
+                    .id(reply.getId())
+                    .content(reply.getContent())
+                    .userId(reply.getUser().getId())
+                    .boardId(reply.getBoard().getId())
+                    .rootReply(reply.isRootReply())
+                    .createTime(reply.getCreateTime())
+                    .parentId(reply.getParent().getId())
+                    .childId(integerList)
+                    .build();
+        }
     }
 }
