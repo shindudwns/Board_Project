@@ -20,20 +20,26 @@ import java.util.List;
 @Service
 @Transactional
 public class ReplyService {
-    @Autowired
-    private ReplyRepository replyRepository;
-    @Autowired
-    private BoardRepository boardRepository;
+    private final ReplyRepository replyRepository;
+    private final BoardRepository boardRepository;
 
+    public ReplyService(ReplyRepository replyRepository, BoardRepository boardRepository) {
+        this.replyRepository = replyRepository;
+        this.boardRepository = boardRepository;
+    }
 
-    public void join(ReplySaveDto replySaveDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
-        Board board = boardRepository.findById(replySaveDto.getBoardId()).get();
+    public void join(ReplySaveDto replySaveDto , @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        Board board = boardRepository.findById(replySaveDto.getBoardId()).orElse(null);
         User user = principalDetail.getUser();
+     //   assert board != null;   //board가 null이면 오류를 찾아내기위한 assert문
         board.setHit(board.getHit());
         Reply reply = Reply.builder()
+                .rootReply(true)
+                .parent(null)
                 .content(replySaveDto.getContent())
                 .user(user)
                 .board(board)
+                .child(new ArrayList<>())
                 .build();
         replyRepository.save(reply);
     }
@@ -49,15 +55,26 @@ public class ReplyService {
     }
 
 
-    public List<ReplySelectDto> findByBoardId(int boardId) {
+    public List<ReplyCommentDto> findByBoardId(int boardId) {
         List<Reply> replyList = replyRepository.findByBoardId(boardId);
-        List<ReplySelectDto> replySelectDtoList = new ArrayList<>();
+        List<ReplyCommentDto> replyCommentDtoList = new ArrayList<>();
         for (Reply reply : replyList) {
-            ReplySelectDto replySelectDto = ReplySelectDto.replyToReplySelectDto(reply);
-            replySelectDtoList.add(replySelectDto);
+            ReplyCommentDto replyCommentDto = ReplyCommentDto.replyToReplyCommentDto(reply);
+            replyCommentDtoList.add(replyCommentDto);
         }
-        return replySelectDtoList;
+
+        return replyCommentDtoList;
     }
+    //대댓글 전용
+//    public List<ReplyCommentDto> CommentReplyFindByBoardId(int boardId) {
+//        List<Reply> replyList = replyRepository.findByBoardId(boardId);
+//        List<ReplyCommentDto> replySelectDtoList = new ArrayList<>();
+//        for (Reply reply : replyList) {
+//            ReplyCommentDto replyCommentDto = ReplyCommentDto.replyToReplyCommentDto(reply);
+//            replySelectDtoList.add(replyCommentDto);
+//        }
+//        return replySelectDtoList;
+//    }
 
     public  List<ReplySelectDto> findAll() {
         List<Reply> replyList = replyRepository.findAll();
@@ -66,6 +83,20 @@ public class ReplyService {
             replySelectDtoList.add(ReplySelectDto.replyToReplySelectDto(reply));
         }
         return replySelectDtoList;
+    }
 
+    public List<ReplyCommentDto> commentReply(ReplyDto replyDto,@AuthenticationPrincipal PrincipalDetail principalDetail) {
+        Board board = boardRepository.findById(replyDto.getBoardId()).orElse(null);
+        Reply parent = replyRepository.findById(replyDto.getParentId()).orElse(null);
+        Reply reply = Reply.builder()
+                .rootReply(false)
+                .child(new ArrayList<>())
+                .parent(parent)
+                .board(board)
+                .content(replyDto.getContent())
+                .user(principalDetail.getUser())
+                .build();
+        replyRepository.save(reply);
+        return findByBoardId(board.getId());
     }
 }

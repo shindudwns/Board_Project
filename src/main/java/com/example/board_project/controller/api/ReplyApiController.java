@@ -5,10 +5,9 @@ import com.example.board_project.dto.*;
 import com.example.board_project.service.ReplyService;
 import com.example.board_project.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,24 +25,31 @@ public class ReplyApiController {
 
     @PostMapping("/reply/save")
     @ResponseBody
-    public List<ReplySelectDto> replySave(@RequestBody ReplySaveDto replySaveDto, @AuthenticationPrincipal PrincipalDetail principalDetail){
+    public List<ReplyCommentDto> replySave(@RequestBody ReplySaveDto replySaveDto, @AuthenticationPrincipal PrincipalDetail principalDetail){
         replyService.join(replySaveDto,principalDetail);
-        List<ReplySelectDto> replySelectDtoList = replyService.findByBoardId(replySaveDto.getBoardId());
-        return replySelectDtoList;
+        return replyService.findByBoardId(replySaveDto.getBoardId());
+
     }
     @PostMapping("/reply/modify")
     @ResponseBody
-    public List<ReplySelectDto> modify(@RequestBody ReplyModifyDto replyModifyDto) {
-        System.out.println(replyModifyDto);
+    public List<ReplyCommentDto> modify(@RequestBody ReplyModifyDto replyModifyDto) {
        replyService.modify(replyModifyDto);
-        List<ReplySelectDto> replySelectDtoList = replyService.findByBoardId(replyModifyDto.getBoardId());
-        return replySelectDtoList;
+        return replyService.findByBoardId(replyModifyDto.getBoardId());
     }
     @PostMapping("/reply/delete")
     @ResponseBody
-    public List<ReplySelectDto> delete(@RequestBody ReplyDeleteDto replyDeleteDto) {
+    public List<ReplyCommentDto> delete(@RequestBody ReplyDeleteDto replyDeleteDto) {
         replyService.deleteById(replyDeleteDto.getReplyId());
-        List<ReplySelectDto> replySelectDtoList = replyService.findByBoardId(replyDeleteDto.getBoardId());
-        return replySelectDtoList;
+        return replyService.findByBoardId(replyDeleteDto.getBoardId());
+    }
+    @GetMapping("admin/reply/delete/{replyId}")
+    public String deleteFromAdmin(@PathVariable int replyId) {
+        replyService.deleteById(replyId);
+        return "redirect:/admin/reply";
+    }
+    @PostMapping("/reply/commentSave")
+    @ResponseBody
+    public List<ReplyCommentDto> commentSave(@RequestBody ReplyDto replyDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        return replyService.commentReply(replyDto, principalDetail);
     }
 }

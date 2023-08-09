@@ -40,12 +40,18 @@ public class UserApiController {
         return "redirect:/";
     }
 
-    @GetMapping("/user/delete")
-    public String delete(@AuthenticationPrincipal PrincipalDetail principalDetail) {
-        int id = principalDetail.getUser().getId();
-        userService.delete(id);
-        return "redirect:/logout";
+    @GetMapping("/user/delete/{userId}")
+    public String delete(@PathVariable int userId) {
+        userService.delete(userId);
+        //회원 상세 정보 페이지에서 삭제
+            return "redirect:/logout";
     }
+    @GetMapping("/admin/user/delete/{userId}")
+    public String deleteFromAdmin(@PathVariable int userId) {
+        userService.delete(userId);
+            return "redirect:/admin/user";
+    }
+
 
     @PostMapping("/auth/saveIdCheck")
     @ResponseBody

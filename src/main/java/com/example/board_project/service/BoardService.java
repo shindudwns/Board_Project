@@ -94,18 +94,12 @@ public class BoardService {
     }
 
     public Page<BoardSelectDto> categoryBoard(Category category, Pageable pageable) {
-
-        Page<BoardSelectDto> boardSelectDtoPage=null;
-        if (category.equals("모두보기")) {
-            boardSelectDtoPage = boardRepository.findAll(pageable)
+        return boardRepository.findByCategoryIs(category, pageable)
                     .map(BoardSelectDto::boardToBoardSelectDto);
-        } else {
-            System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@"+category);
-            boardSelectDtoPage = boardRepository.findByCategoryIs(category.getValue(), pageable)
-                    .map(BoardSelectDto::boardToBoardSelectDto);
-        }
+    }
 
-        return boardSelectDtoPage;
-
+    public Page<BoardSelectDto> searchTitleAndCategory(String searchTitle, Category category, Pageable pageable) {
+        return boardRepository.findByCategoryIsAndTitleContaining(category, searchTitle, pageable)
+                .map(BoardSelectDto::boardToBoardSelectDto);
     }
 }

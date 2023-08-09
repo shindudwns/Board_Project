@@ -37,7 +37,7 @@ public class UserSelectDto {  //오직 User의 정보만 갖고있다.
 
     private Timestamp createTime;
 
-    static public UserSelectDto userToUserSelectDto(User user){
+    public static UserSelectDto userToUserSelectDto(User user){
         List<Reply> replyList = user.getReplyList();
         List<ReplyDto> replyDtoList1 = new ArrayList<>();
 

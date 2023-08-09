@@ -46,15 +46,17 @@ public class UserService {
 
 
     public void modify(UserModifyDto userModifyDto) {
-        System.out.println(userModifyDto);
-        User user = userRepository.findById(userModifyDto.getId()).get();
-        user.setLoginId(userModifyDto.getLoginId());
-        user.setPassword(encoder.encode(userModifyDto.getPassword()));
-        user.setUsername(userModifyDto.getUsername());
-        user.setName(userModifyDto.getName());
-        user.setPhoneNumber(userModifyDto.getPhoneNumber());
-        user.setCreateTime(userModifyDto.getCreateTime());
-        userRepository.save(user);
+        //유효성 체크 POST공격 방어
+        if (!userModifyDto.getPhoneNumber().equals("000-0000-0000")) {
+            User user = userRepository.findById(userModifyDto.getId()).get();
+            user.setLoginId(userModifyDto.getLoginId());
+            user.setPassword(encoder.encode(userModifyDto.getPassword()));
+            user.setUsername(userModifyDto.getUsername());
+            user.setName(userModifyDto.getName());
+            user.setPhoneNumber(userModifyDto.getPhoneNumber());
+            user.setCreateTime(userModifyDto.getCreateTime());
+            userRepository.save(user);
+        }
     }
 
 
@@ -64,16 +66,14 @@ public class UserService {
 
 
     public User saveIdCheck(String newLoginId) {
-        User user = userRepository.findByLoginId(newLoginId).orElse(null);
-        return user;
+        return userRepository.findByLoginId(newLoginId).orElse(null);
     }
     public User modifyIdCheck(String newLoginId,@AuthenticationPrincipal PrincipalDetail principalDetail) {
         String loginId = principalDetail.getUser().getLoginId();
         if(loginId.equals(newLoginId)){
             return null;
         }
-        User user = userRepository.findByLoginId(newLoginId).orElse(null);
-        return user;
+        return userRepository.findByLoginId(newLoginId).orElse(null);
     }
 
     public List<UserSelectDto>  findAll() {
@@ -88,8 +88,13 @@ public class UserService {
 
     public UserSelectDto takeLoginUser(@AuthenticationPrincipal PrincipalDetail principalDetail) {
         User user = userRepository.findById(principalDetail.getUser().getId()).get();
-        UserSelectDto userSelectDto = UserSelectDto.userToUserSelectDto(user);
-        return userSelectDto;
+        return UserSelectDto.userToUserSelectDto(user);
 
     }
+
+    public User findByLoginId(String loginId) {
+        return userRepository.findByLoginId(loginId).orElse(null);
+    }
+
+
 }

@@ -34,7 +34,7 @@ public class BoardSelectDto {
 
     private Timestamp createTime;
 
-    static public BoardSelectDto boardToBoardSelectDto(Board board) {
+    public static BoardSelectDto boardToBoardSelectDto(Board board) {
         List<Reply> replyList = board.getReplyList();
         List<ReplyDto> replyDtoList1 = new ArrayList<>();
 
