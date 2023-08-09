@@ -33,7 +33,7 @@ public class UserDto {  //오직 User의 정보만 갖고있다.
 
     private Timestamp createTime;
 
-    static public UserDto userToUserDto(User user){
+    public static UserDto userToUserDto(User user){
         UserDto proxyUser = UserDto.builder()
                 .id(user.getId())
                 .loginId(user.getLoginId())

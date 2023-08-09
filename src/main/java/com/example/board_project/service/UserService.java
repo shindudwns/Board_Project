@@ -46,14 +46,17 @@ public class UserService {
 
 
     public void modify(UserModifyDto userModifyDto) {
-        User user = userRepository.findById(userModifyDto.getId()).get();
-        user.setLoginId(userModifyDto.getLoginId());
-        user.setPassword(encoder.encode(userModifyDto.getPassword()));
-        user.setUsername(userModifyDto.getUsername());
-        user.setName(userModifyDto.getName());
-        user.setPhoneNumber(userModifyDto.getPhoneNumber());
-        user.setCreateTime(userModifyDto.getCreateTime());
-        userRepository.save(user);
+        //유효성 체크 POST공격 방어
+        if (!userModifyDto.getPhoneNumber().equals("000-0000-0000")) {
+            User user = userRepository.findById(userModifyDto.getId()).get();
+            user.setLoginId(userModifyDto.getLoginId());
+            user.setPassword(encoder.encode(userModifyDto.getPassword()));
+            user.setUsername(userModifyDto.getUsername());
+            user.setName(userModifyDto.getName());
+            user.setPhoneNumber(userModifyDto.getPhoneNumber());
+            user.setCreateTime(userModifyDto.getCreateTime());
+            userRepository.save(user);
+        }
     }
 
 
@@ -88,4 +91,10 @@ public class UserService {
         return UserSelectDto.userToUserSelectDto(user);
 
     }
+
+    public User findByLoginId(String loginId) {
+        return userRepository.findByLoginId(loginId).orElse(null);
+    }
+
+
 }

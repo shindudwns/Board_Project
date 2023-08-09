@@ -35,7 +35,7 @@ public class ReplySelectDto {
     private Timestamp createTime;
 
 
-    static public ReplySelectDto replyToReplySelectDto(Reply reply) {
+    public static ReplySelectDto replyToReplySelectDto(Reply reply) {
         List<Reply> replyList = reply.getChild();
         List<ReplyDto> replyDtoList = new ArrayList<>();
         for (Reply reply1 : replyList) {

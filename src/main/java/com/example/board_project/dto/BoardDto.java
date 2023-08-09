@@ -29,7 +29,7 @@ public class BoardDto { //오직 Board의 정보만 갖고있다.
 
     private Timestamp createTime;
 
-    static public BoardDto boardToBoardDto(Board board) {
+    public static BoardDto boardToBoardDto(Board board) {
         BoardDto boardDto = BoardDto.builder()
                 .id(board.getId())
                 .title(board.getTitle())

@@ -34,7 +34,7 @@ public class ReplyDto { //오직 Reply의 정보만 갖고있다.
 
     private Timestamp createTime;
 
-    static public ReplyDto replyToReplyDto(Reply reply) {
+     public static ReplyDto replyToReplyDto(Reply reply) {
         List<Integer> integerList = new ArrayList<>();
         List<Reply> child = reply.getChild();
         for (Reply reply1 : child) {
