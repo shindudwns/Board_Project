@@ -3,10 +3,12 @@ package com.example.board_project;
 import com.example.board_project.controller.UserController;
 import com.example.board_project.entity.User;
 import com.example.board_project.service.UserService;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,15 +17,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 class BoardProjectApplicationTests {
 
-    @Autowired
-    private UserController userController;
-
-    @Autowired
-    private UserService userService;
-
     @Test
     void contextLoads() {
         String str = "asdf";
-        Assertions.assertThat (str.equals("aaaa"));
+        assertThat(str).isEqualTo("asdf");
     }
 }
