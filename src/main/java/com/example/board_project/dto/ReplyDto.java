@@ -5,8 +5,10 @@ import com.example.board_project.entity.Reply;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Getter
@@ -35,6 +37,7 @@ public class ReplyDto { //오직 Reply의 정보만 갖고있다.
     private Timestamp createTime;
 
      public static ReplyDto replyToReplyDto(Reply reply) {
+
         List<Integer> integerList = new ArrayList<>();
         List<Reply> child = reply.getChild();
         for (Reply reply1 : child) {

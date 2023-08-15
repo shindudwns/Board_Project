@@ -1,3 +1,11 @@
+# Test
+spring:
+  profiles:
+    active: local # 기본 환경 선택
+---
+# local 환경
+
+
 # 서버 포트 설정
 server:
   port: 8080
@@ -41,6 +49,10 @@ spring:
     show-sql: false  #테이블이 만들어지는 sql이 보여진다
     properties:
       hibernate.format_sql: false  #sql이 깔끔하게 보여진다
+
+  config:
+    activate:
+      on-profile:
 cos:
   key: cos1234
   jackson:
